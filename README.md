@@ -1,21 +1,29 @@
 # Cassandra
 
-[![Build Status](https://travis-ci.org/DistributedTeam/Cassandra.svg)](https://travis-ci.org/DistributedTeam/Cassandra)
+[![Build Status](https://travis-ci.org/DistributedTeam/Cassandra.svg?branch=master)](https://travis-ci.org/DistributedTeam/Cassandra)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/pw048cfqyuo829un/branch/master?svg=true)](https://ci.appveyor.com/project/xpdavid/cassandra/branch/master)
 
 Report for Cassandra implementation of the project
 
+### General Instruction
+
+Our build scipt is `gradlew`. For Windows users, please use `gradlew.bat` at project root. For Linux/Mac users, please use `gradlew` at project root. 
+To make things easy, the following instruction will refer this script as `gradlew`.
+
+### Prerequisite
+
+- [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and above
+- [Python 2.7](https://www.python.org/download/releases/2.7/) (For importing data)
+
+### Generate Data
+
+- `gradlew massage:run`
+
 ### Import Data
 
-It's is recommended that you have [`Dbeaver EE`](https://dbeaver.jkiss.org/files/3.8.5/) installed and connect to your cluster
+**Please make sure you have run `massage:run` task first**
 
-1. Put your project file (http://www.comp.nus.edu.sg/~cs4224/4224-project-files.zip) under `project-file`  (contains two folders `data-files` and `xact-files`)
+Please make sure your have a running cassandra on the IP address you choose. The script assume that the default IP is `127.0.0.1`. You can change it in `import/project.properties`
 
-1. Have a running Cassandra in your machine
-
-2. Create a keyspace `cs4224` (actually you can choose any name)
-
-3. Run the schema under `datamodel/schema.cql` in the keyspace
-
-4. In the root project, run `./gradlew massage:run` (For Windows, change `./gradlew` to `gradlew.bat`). This will convert source data that fit our project and store it under `database-data`
-
-5. Go to `database-data`, run command `COPY {{TABLE_NAME}} FROM '{{FILE_NAME}}.csv' WITH DELIMITER = ',' AND HEADER = FALSE;`. This will import data from CSV file. This may takes a while.
+- `gradlew import:all`

@@ -1,7 +1,7 @@
 import parser.IParser;
 import parser.ParserMap;
 import transaction.ITransaction;
-import util.Constant;
+import cs4224c.util.Constant;
 
 import java.util.Scanner;
 
