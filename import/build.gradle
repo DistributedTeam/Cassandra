@@ -1,0 +1,55 @@
+group 'com.nus.comp.cs4224c'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+task createKeyspace(type: JavaExec) {
+    main = "cs4224c.task.CreateKeyspaceTask"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task dropTable(type: JavaExec) {
+    main = "cs4224c.task.DropTableTask"
+    classpath = sourceSets.main.runtimeClasspath
+}
+dropTable.mustRunAfter createKeyspace
+
+task importSchema(type: JavaExec) {
+    main = "cs4224c.task.ImportSchemaTask"
+    classpath = sourceSets.main.runtimeClasspath
+}
+importSchema.mustRunAfter dropTable
+
+task importData(type: JavaExec) {
+    main = "cs4224c.task.ImportDataTask"
+    classpath = sourceSets.main.runtimeClasspath
+}
+importData.mustRunAfter importSchema
+
+task all() {
+    doFirst {
+        println("Rebuild keyspace, Clear All Data and Import All Data")
+    }
+}
+all.dependsOn createKeyspace, dropTable, importSchema, importData
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+dependencies {
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
+    compile group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.3'
+    compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.3.0'
+    compile group: 'org.apache.commons', name: 'commons-configuration2', version: '2.1'
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.2'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

@@ -1,0 +1,5 @@
+rootProject.name = 'cassandra'
+include 'massage'
+include 'import'
+include 'client'
+

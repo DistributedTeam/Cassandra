@@ -1,0 +1,33 @@
+skip_branch_with_pr: true
+image: Visual Studio 2017
+
+environment:
+  TC: UTC
+  matrix:
+    - PYTHON: "C:\\Python27"
+
+install:
+  # Prepend chosen Python to the PATH of this build
+  - SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+  # Check that we have the expected version and architecture for Python
+  - python --version
+  - where pip
+  - pip install pytz # cqlsh need this package
+  - appveyor DownloadFile http://www-us.apache.org/dist/cassandra/3.11.0/apache-cassandra-3.11.0-bin.tar.gz -FileName cassandra.tar.gz
+  - dir && 7z e cassandra.tar.gz -tgzip -y && dir && 7z x cassandra.tar -ttar -r -aou && dir && cd apache-cassandra-3.11.0 && dir
+  - cd bin && dir
+  - ps: $DbProcess = Start-Process cassandra.bat -PassThru
+
+on_finish:
+  - ps: Stop-Process -Id $DbProcess.Id
+
+platform:
+  - x64
+  - x86
+
+build_script:
+  - cd C:\projects\cassandra
+  - gradlew.bat assemble --info --no-daemon
+
+test_script:
+  - gradlew.bat check --info --no-daemon
