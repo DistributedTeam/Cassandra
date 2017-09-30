@@ -49,7 +49,7 @@ public class NewOrderTransaction extends AbstractTransaction {
         logger.info("Get and update d_next_o_id");
         List<Object> args = Lists.newArrayList(data.getW_ID(), data.getD_ID());
         Row warehouseDistrictRow = QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.GET_D_NEXT_O_ID, args, PStatement.UPDATE_D_NEXT_O_ID, args,
-                row -> Collections.singletonList(row.getInt(INDEX_NEXT_O_ID)), oldValues -> Collections.singletonList((int) oldValues.get(INDEX_FIRST) + 1));
+                row -> Collections.singletonList(row.getInt(INDEX_NEXT_O_ID) + 1), row -> row.getInt(INDEX_NEXT_O_ID));
         int next_o_id = warehouseDistrictRow.getInt(INDEX_NEXT_O_ID);
         data.setW_TAX(warehouseDistrictRow.getDouble(INDEX_W_TAX));
         data.setD_TAX(warehouseDistrictRow.getDouble(INDEX_D_TAX));
@@ -68,14 +68,15 @@ public class NewOrderTransaction extends AbstractTransaction {
             NewOrderTransactionOrderLine orderLine = data.getOrderLines().get(i);
             List<Object> orderLineArgs = Lists.newArrayList(orderLine.getOL_SUPPLY_W_ID(), orderLine.getOL_I_ID());
             Row stockRow = QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.valueOf("GET_STOCK_DIST_" + data.getD_ID()), orderLineArgs, PStatement.UPDATE_STOCK, orderLineArgs,
-                    row -> Collections.singletonList(row.getInt(INDEX_STOCK_QUANTITY)),
-                    sQuantity -> {
-                        int quantity = (int) sQuantity.get(INDEX_FIRST) - orderLine.getOL_QUANTITY();
+                    row -> {
+                        int quantity = row.getInt(INDEX_STOCK_QUANTITY) - orderLine.getOL_QUANTITY();
                         if (quantity < 10) {
                             quantity += 100;
                         }
                         return Collections.singletonList(quantity);
-                    });
+                    },
+                    row -> row.getInt(INDEX_STOCK_QUANTITY)
+            );
             double itemPrice = stockRow.getDouble(INDEX_STOCK_ITEM_PRICE);
             String distInfo = stockRow.getString(INDEX_STOCK_DIST_INFO);
             double itemAmount = orderLine.getOL_QUANTITY() * itemPrice;

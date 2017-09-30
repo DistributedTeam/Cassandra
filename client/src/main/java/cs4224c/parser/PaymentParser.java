@@ -27,7 +27,7 @@ public class PaymentParser extends AbstractParser {
         data.setC_W_ID(Short.parseShort(arguments[INDEX_C_W_ID]));
         data.setC_D_ID(Short.parseShort(arguments[INDEX_C_D_ID]));
         data.setC_ID(Integer.parseInt(arguments[INDEX_C_ID]));
-        data.setPAYMENT(Integer.parseInt(arguments[INDEX_PAYMENT]));
+        data.setPAYMENT(Double.parseDouble(arguments[INDEX_PAYMENT]));
 
         transaction.setData(data);
 

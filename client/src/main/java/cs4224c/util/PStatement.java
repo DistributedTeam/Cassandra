@@ -21,8 +21,10 @@ public enum PStatement {
     GET_CUSTOMER("SELECT c_discount, c_last, c_credit from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
 
     // Payment Transaction
-    GET_BALANCE("SELECT c_payment_cnt, c_balance, c_ytd_payment FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
-    UPDATE_BALANCE_PAYMENT("UPDATE customer SET c_payment_cnt = ?, c_balance = ?, c_ytd_payment = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ? IF c_payment_cnt = ?");
+    GET_BALANCE_PAYMENT("SELECT c_balance, c_ytd_payment, c_payment_cnt FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    UPDATE_BALANCE_PAYMENT("UPDATE customer SET c_balance = ?, c_ytd_payment = ?, c_payment_cnt = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ? IF c_payment_cnt = ?"),
+    GET_CUSTOMER_FULL("SELECT c_first, c_middle, c_last, c_address, c_phone, c_since, c_credit, c_credit_lim, c_discount, c_balance FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_WD_ADDRESS("SELECT w_address, d_address FROM warehouse_district WHERE d_w_id = ? AND d_id = ?");
 
     private String cql;
 

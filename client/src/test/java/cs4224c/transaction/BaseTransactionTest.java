@@ -9,6 +9,8 @@ import org.gradle.tooling.ProjectConnection;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,6 +19,8 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class BaseTransactionTest {
+
+    private final Logger logger = LoggerFactory.getLogger(BaseTransactionTest.class);
 
     protected PrintStream systemOutput;
 
@@ -45,6 +49,7 @@ public class BaseTransactionTest {
 
     @After
     public void after() {
+        logger.info("Output from System:\n{}", baos.toString());
         System.setOut(systemOutput); //
     }
 

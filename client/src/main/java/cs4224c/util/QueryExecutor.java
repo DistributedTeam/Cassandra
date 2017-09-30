@@ -62,17 +62,15 @@ public class QueryExecutor {
         return resultSet.one();
     }
 
-    public Row getAndUpdateWithRetry(PStatement getStatement, List<Object> getArgs, PStatement updateStatement, List<Object> updateArgs, Function<Row, List<Object>> positionFunc, Function<List<Object>, List<Object>> updateFunc) {
+    public Row getAndUpdateWithRetry(PStatement getStatement, List<Object> getArgs, PStatement updateStatement, List<Object> updateArgs, Function<Row, List<Object>> updateFunc, Function<Row, Object> ifPositionFunc) {
         Row result = null;
         int count = 1;
         while (true) {
             result = executeAndGetOneRow(getStatement, getArgs);
             List<Object> newUpdateArgs = Lists.newArrayList();
-            List<Object> oldValues = positionFunc.apply(result);
-            List<Object> newValues = updateFunc.apply(oldValues);
-            newUpdateArgs.addAll(newValues);
+            newUpdateArgs.addAll(updateFunc.apply(result));
             newUpdateArgs.addAll(updateArgs);
-            newUpdateArgs.addAll(oldValues); // if statement params
+            newUpdateArgs.add(ifPositionFunc.apply(result)); // if statement params
             ResultSet resultSet = execute(updateStatement, newUpdateArgs);
             if (resultSet.wasApplied()) {
                 break;
@@ -82,6 +80,7 @@ public class QueryExecutor {
                         getStatement, getArgs, updateStatement, updateArgs, count);
                 throw new RuntimeException();
             }
+            count++;
         }
         return result;
     }
