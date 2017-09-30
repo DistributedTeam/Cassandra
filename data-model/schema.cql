@@ -12,11 +12,10 @@ CREATE TABLE warehouse_district (
     d_address address,
     d_name text,
     d_next_o_id int,
-    d_tax float,
-    d_ytd double,
+    d_tax double,
     w_address address,
     w_name text,
-    w_tax float,
+    w_tax double,
     PRIMARY KEY ((d_w_id, d_id))
 );
 
@@ -29,15 +28,16 @@ CREATE TABLE order_by_o_id (
     o_carrier_id int,
     o_entry_d timestamp,
     o_ol_cnt int,
-    PRIMARY KEY ((o_w_id, o_d_id), o_id)
+    PRIMARY KEY ((o_w_id, o_d_id, o_id))
 );
 
-CREATE MATERIALIZED VIEW order_by_c_id
-  AS SELECT * FROM order_by_o_id
-  WHERE o_w_id IS NOT NULL and o_d_id IS NOT NULL and
-    o_c_id IS NOT NULL and o_id IS NOT NULL and
-    o_entry_d IS NOT NULL and o_carrier_id IS NOT NULL
-  PRIMARY KEY ((o_w_id, o_d_id), o_c_id, o_id);
+CREATE TABLE delivery_transaction (
+    dt_w_id smallint,
+    dt_d_id smallint,
+    dt_min_ud_o_id int,
+    PRIMARY KEY ((dt_w_id, dt_d_id))
+);
+
 
 CREATE TABLE order_line_item (
     ol_w_id smallint,
@@ -51,8 +51,8 @@ CREATE TABLE order_line_item (
     ol_i_id int,
     ol_quantity int,
     ol_supply_w_id smallint,
-    PRIMARY KEY ((ol_w_id, ol_d_id), ol_o_id, ol_number)
-) WITH CLUSTERING ORDER BY (ol_o_id DESC, ol_number ASC);
+    PRIMARY KEY ((ol_w_id, ol_d_id, ol_o_id), ol_number)
+);
 
 CREATE TABLE stock_item (
     s_w_id smallint,
@@ -89,14 +89,14 @@ CREATE TABLE customer (
     c_credit_lim double,
     c_data text,
     c_delivery_cnt int,
-    c_discont float,
+    c_discount double,
     c_first text,
     c_middle text,
     c_last text,
     c_payment_cnt int,
     c_phone text,
     c_since timestamp,
-    c_ytd_payment float,
+    c_ytd_payment double,
     PRIMARY KEY ((c_w_id, c_d_id), c_id)
 );
 
@@ -106,4 +106,4 @@ CREATE MATERIALIZED VIEW customer_balance
     c_balance IS NOT NULL and c_id IS NOT NULL and
     c_first IS NOT NULL and c_middle IS NOT NULL and
     c_last IS NOT NULL
-  PRIMARY KEY ((c_w_id, c_d_id), c_balance, c_id);
+  PRIMARY KEY ((c_w_id, c_d_id), c_balance, c_id)

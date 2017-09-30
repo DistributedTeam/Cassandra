@@ -14,11 +14,11 @@ public class QueryExecutor {
 
     private final String GLOBAL_SESSION = "_global";
 
-    final Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
+    private final Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
 
     private static QueryExecutor instance;
 
-    public static QueryExecutor getInstance() {
+    public synchronized static QueryExecutor getInstance() {
         if (instance == null) {
             instance = new QueryExecutor();
         }
@@ -40,7 +40,7 @@ public class QueryExecutor {
         }
     }
 
-    private void initializeKeyspace(String keyspace) {
+    private synchronized void initializeKeyspace(String keyspace) {
         try {
             sessionMap.put(keyspace, cluster.connect(keyspace));
         } catch (Exception e) {

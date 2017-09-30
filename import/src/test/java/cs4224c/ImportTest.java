@@ -62,6 +62,7 @@ public class ImportTest {
         validateTable("order_line_item.csv");
         validateTable("stock_item.csv");
         validateTable("warehouse_district.csv");
+        validateTable("delivery_transaction.csv");
     }
 
     public void validateTable(String tableFile) throws Exception {
@@ -72,7 +73,7 @@ public class ImportTest {
 
         List<CSVRecord> csvRecords = readRecord(tableFile);
 
-        Assert.assertEquals("DB and CSV file should have the same number of rows.", csvRecords.size(), resultSet.one().getLong(0));
+        Assert.assertEquals("DB and CSV file should have the same number of rows." + tableFile, csvRecords.size(), resultSet.one().getLong(0));
     }
 
     public List<CSVRecord> readRecord(String name) throws IOException {

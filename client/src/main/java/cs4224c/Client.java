@@ -1,6 +1,8 @@
-import parser.IParser;
-import parser.ParserMap;
-import transaction.ITransaction;
+package cs4224c;
+
+import cs4224c.parser.AbstractParser;
+import cs4224c.parser.ParserMap;
+import cs4224c.transaction.AbstractTransaction;
 import cs4224c.util.Constant;
 
 import java.util.Scanner;
@@ -18,13 +20,13 @@ public class Client {
             String[] arguments = line.split(Constant.COMMA_SEPARATOR);
             String command = arguments[INDEX_COMMAND];
 
-            Class<? extends IParser> parserClass = ParserMap.get(command);
+            Class<? extends AbstractParser> parserClass = ParserMap.get(command);
             if (parserClass == null) {
                 System.out.println("Invalid command: " + command);
             }
 
-            IParser parser = parserClass.newInstance();
-            ITransaction transaction = parser.parse(sc, arguments);
+            AbstractParser parser = parserClass.newInstance();
+            AbstractTransaction transaction = parser.parse(sc, arguments);
 
             System.out.println(transaction);
         }

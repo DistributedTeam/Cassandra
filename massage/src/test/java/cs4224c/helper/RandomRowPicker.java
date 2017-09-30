@@ -155,6 +155,14 @@ public class RandomRowPicker {
                 )
                 .collect(Collectors.toList());
 
+        logger.info("[order-with-order-line] drop all that don't have order id in orderLine.");
+        Set<String> orderLineOrderNumber = orderLine.stream()
+                .map(csvRecord -> csvRecord.get(INDEX_OL_O_ID))
+                .collect(Collectors.toCollection(HashSet::new));
+        order = order.stream()
+                .filter(csvRecord -> orderLineOrderNumber.contains(csvRecord.get(INDEX_O_ID)))
+                .collect(Collectors.toList());
+
         logger.info("[stock] drop all that don't have warehouse id and item id.");
         stock = stock.stream()
                 .filter(csvRecord -> warehouseIdSet.contains(csvRecord.get(INDEX_S_W_ID))

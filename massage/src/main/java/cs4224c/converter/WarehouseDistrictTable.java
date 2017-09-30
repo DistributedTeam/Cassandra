@@ -73,7 +73,7 @@ public class WarehouseDistrictTable extends AbstractConverter {
             result.add(district.get(D_NAME));
             result.add(district.get(D_NEXT_O_ID));
             result.add(district.get(D_TAX));
-            result.add(district.get(D_YTD));
+            //result.add(district.get(D_YTD));
 
             CSVRecord currWarehouse = warehouses.get(result.get(D_W_ID));
 

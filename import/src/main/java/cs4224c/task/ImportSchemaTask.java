@@ -5,12 +5,15 @@ import cs4224c.util.Constant;
 import cs4224c.util.ProjectConfig;
 import cs4224c.util.QueryExecutor;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImportSchemaTask implements Runnable {
 
