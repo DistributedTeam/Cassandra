@@ -4,6 +4,8 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/pw048cfqyuo829un/branch/master?svg=true)](https://ci.appveyor.com/project/xpdavid/cassandra/branch/master)
 
+[![Coverage Status](https://coveralls.io/repos/github/DistributedTeam/Cassandra/badge.svg?branch=master)](https://coveralls.io/github/DistributedTeam/Cassandra?branch=master)
+
 Report for Cassandra implementation of the project
 
 ### General Instruction
