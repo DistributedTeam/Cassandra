@@ -10,24 +10,24 @@ repositories {
 }
 
 task createKeyspace(type: JavaExec) {
-    main = "cs4224c.task.CreateKeyspaceTask"
+    main = "importtask.cs4224c.task.CreateKeyspaceTask"
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task dropTable(type: JavaExec) {
-    main = "cs4224c.task.DropTableTask"
+    main = "importtask.cs4224c.task.DropTableTask"
     classpath = sourceSets.main.runtimeClasspath
 }
 dropTable.mustRunAfter createKeyspace
 
 task importSchema(type: JavaExec) {
-    main = "cs4224c.task.ImportSchemaTask"
+    main = "importtask.cs4224c.task.ImportSchemaTask"
     classpath = sourceSets.main.runtimeClasspath
 }
 importSchema.mustRunAfter dropTable
 
 task importData(type: JavaExec) {
-    main = "cs4224c.task.ImportDataTask"
+    main = "importtask.cs4224c.task.ImportDataTask"
     classpath = sourceSets.main.runtimeClasspath
 }
 importData.mustRunAfter importSchema

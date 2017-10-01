@@ -18,3 +18,4 @@ build/
 /massage/build/
 /impoprtData/build/
 /client/build/
+/import/cassandraCqlSh/*.pyc

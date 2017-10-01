@@ -11,7 +11,7 @@
         </layout>
     </appender>
 
-    <logger name="cs4224c" level="INFO" additivity="false">
+    <logger name="importtask.cs4224c" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 
