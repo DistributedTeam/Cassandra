@@ -36,9 +36,12 @@ public class NewOrderTransaction extends AbstractTransaction {
     private static int INDEX_D_TAX = 2;
 
     private static int INDEX_STOCK_QUANTITY = 0;
-    private static int INDEX_STOCK_ITEM_PRICE = 1;
-    private static int INDEX_STOCK_ITEM_NAME = 2;
-    private static int INDEX_STOCK_DIST_INFO = 3;
+    private static int INDEX_STOCK_YTD = 1;
+    private static int INDEX_STOCK_ORDER_CNT = 2;
+    private static int INDEX_STOCK_REMOTE_CNT = 3;
+    private static int INDEX_STOCK_ITEM_PRICE = 0;
+    private static int INDEX_STOCK_ITEM_NAME = 1;
+    private static int INDEX_STOCK_DIST_INFO = 2;
 
     private static int INDEX_CUSTOMER_DISCOUNT = 0;
     private static int INDEX_CUSTOMER_LAST = 1;
@@ -67,24 +70,38 @@ public class NewOrderTransaction extends AbstractTransaction {
             logger.info("Create order-line[{}]", i);
             NewOrderTransactionOrderLine orderLine = data.getOrderLines().get(i);
             List<Object> orderLineArgs = Lists.newArrayList(orderLine.getOL_SUPPLY_W_ID(), orderLine.getOL_I_ID());
-            Row stockRow = QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.valueOf("GET_STOCK_DIST_" + data.getD_ID()), orderLineArgs, PStatement.UPDATE_STOCK, orderLineArgs,
+
+            QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.GET_STOCK, orderLineArgs, PStatement.UPDATE_STOCK, orderLineArgs,
                     row -> {
                         int quantity = row.getInt(INDEX_STOCK_QUANTITY) - orderLine.getOL_QUANTITY();
                         if (quantity < 10) {
                             quantity += 100;
                         }
-                        return Collections.singletonList(quantity);
+                        orderLine.setS_QUANTITY(quantity); // updated quantity for the item
+                        int remoteCnt = row.getInt(INDEX_STOCK_REMOTE_CNT);
+                        if (orderLine.getOL_SUPPLY_W_ID() != data.getW_ID()) {
+                            remoteCnt++;
+                        }
+                        return Lists.newArrayList(quantity,
+                                row.getDouble(INDEX_STOCK_YTD) + orderLine.getOL_QUANTITY(),
+                                row.getInt(INDEX_STOCK_ORDER_CNT) + 1,
+                                remoteCnt);
                     },
-                    row -> row.getInt(INDEX_STOCK_QUANTITY)
-            );
+                    row -> row.getInt(INDEX_STOCK_ORDER_CNT));
+
+            Row stockRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.valueOf("GET_STOCK_DIST_" + data.getD_ID()), orderLineArgs);
+            if (stockRow == null) {
+                throw new RuntimeException("Empty stock row!");
+            }
+
             double itemPrice = stockRow.getDouble(INDEX_STOCK_ITEM_PRICE);
             String distInfo = stockRow.getString(INDEX_STOCK_DIST_INFO);
+            orderLine.setI_NAME(stockRow.getString(INDEX_STOCK_ITEM_NAME));
+
             double itemAmount = orderLine.getOL_QUANTITY() * itemPrice;
+            orderLine.setOL_AMOUNT(itemAmount);
             total_amount += itemAmount;
 
-            orderLine.setS_QUANTITY(stockRow.getInt(INDEX_STOCK_QUANTITY));
-            orderLine.setI_NAME(stockRow.getString(INDEX_STOCK_ITEM_NAME));
-            orderLine.setOL_AMOUNT(itemAmount);
 
             ResultSet olResultSet = QueryExecutor.getInstance().execute(PStatement.INSERT_ORDER_LINE, Lists.newArrayList(data.getW_ID(), data.getD_ID(), next_o_id, i + 1, orderLine.getOL_I_ID(),
                     orderLine.getOL_SUPPLY_W_ID(), orderLine.getOL_QUANTITY(), itemAmount, distInfo, orderLine.getI_NAME()));
