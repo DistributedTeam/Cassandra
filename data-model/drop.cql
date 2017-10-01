@@ -1,5 +1,5 @@
-DROP MATERIALIZED VIEW IF EXISTS  order_by_c_id;
-DROP MATERIALIZED VIEW IF EXISTS  customer_balance;
+DROP MATERIALIZED VIEW IF EXISTS customer_balance;
+DROP TABLE IF EXISTS delivery_transaction;
 DROP TABLE IF EXISTS warehouse_district;
 DROP TABLE IF EXISTS order_by_o_id;
 DROP TABLE IF EXISTS order_line_item;
