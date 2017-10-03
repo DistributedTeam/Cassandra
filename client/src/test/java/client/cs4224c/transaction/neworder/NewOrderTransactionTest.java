@@ -31,6 +31,10 @@ public class NewOrderTransactionTest extends BaseTransactionTest {
         ResultSet order = QueryExecutor.getInstance().execute("SELECT o_c_id, o_carrier_id, o_ol_cnt, o_all_local FROM order_by_o_id WHERE o_w_id = 12 AND o_d_id = 7 AND o_id = 3001");
         Assert.assertEquals("Row[1120, NULL, 3, false]", order.one().toString());
 
+        // validate customer last order
+        ResultSet customerLastOrder = QueryExecutor.getInstance().execute("SELECT c_last_order FROM customer WHERE c_w_id = 12 AND c_d_id = 7 AND c_id = 1120");
+        Assert.assertEquals("Row[3001]", customerLastOrder.one().toString());
+
         // validate stock
         ResultSet stock1 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item WHERE s_w_id = 12 AND s_i_id = 68");
         Assert.assertEquals("Row[10, 15.0, 1, 0]", stock1.one().toString());

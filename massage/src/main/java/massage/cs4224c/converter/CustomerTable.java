@@ -6,9 +6,7 @@ import massage.cs4224c.util.TimeUtility;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.io.FileReader;
@@ -18,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class CustomerTable extends AbstractConverter {
 
@@ -96,7 +95,7 @@ public class CustomerTable extends AbstractConverter {
             result.add(customer.get(C_LAST));
 
             Triple<String, String, String> identifier = new ImmutableTriple<>(customer.get(C_W_ID), customer.get(C_D_ID), customer.get(C_ID));
-            result.add(customerLatestOrder.getOrDefault(identifier, ""));
+            result.add(customerLatestOrder.getOrDefault(identifier, "-1"));
 
             result.add(customer.get(C_MIDDLE));
             result.add(customer.get(C_PAYMENT_CNT));
