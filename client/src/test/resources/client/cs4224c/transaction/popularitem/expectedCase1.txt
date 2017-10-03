@@ -1,0 +1,26 @@
+1. W_ID: 1, D_ID: 1
+2. Number of last orders to be examined: 1
+3.(a) O_ID: 3000, O_ENTRY_D: 26/8/2017  9:54:39 PM
+3.(b) C_FIRST: gmcrwzdmmes, C_MIDDLE: OE, C_LAST: PRESEINGBAR
+3.(c)
+(i) Item: pfndqtzrgypdvk
+(ii) Quantity Ordered: 5
+(i) Item: afxtpnigtbmxkhqucah
+(ii) Quantity Ordered: 5
+(i) Item: pehglheskxicfbjxyjefaoi
+(ii) Quantity Ordered: 5
+(i) Item: xndbbtqwcranltbwpkhzn
+(ii) Quantity Ordered: 5
+(i) Item: dxgfyhiluwldlsswura
+(ii) Quantity Ordered: 5
+4.(a)
+(i) Item: pfndqtzrgypdvk
+(ii) Percentage of orders that contain the popular item: 100.00%
+(i) Item: afxtpnigtbmxkhqucah
+(ii) Percentage of orders that contain the popular item: 100.00%
+(i) Item: pehglheskxicfbjxyjefaoi
+(ii) Percentage of orders that contain the popular item: 100.00%
+(i) Item: xndbbtqwcranltbwpkhzn
+(ii) Percentage of orders that contain the popular item: 100.00%
+(i) Item: dxgfyhiluwldlsswura
+(ii) Percentage of orders that contain the popular item: 100.00%
