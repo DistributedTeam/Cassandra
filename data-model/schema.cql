@@ -93,6 +93,7 @@ CREATE TABLE customer (
     c_first text,
     c_middle text,
     c_last text,
+    c_last_order int,
     c_payment_cnt int,
     c_phone text,
     c_since timestamp,

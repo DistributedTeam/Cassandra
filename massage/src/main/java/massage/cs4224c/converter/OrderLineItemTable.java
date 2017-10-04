@@ -69,7 +69,7 @@ public class OrderLineItemTable extends AbstractConverter {
             result.add(orderLine.get(OL_AMOUNT));
 
             String deliveryD = orderLine.get(OL_DELIVERY_D);
-            result.add("null".equals(deliveryD) ? "0" : TimeUtility.parse(deliveryD).toString());
+            result.add("null".equals(deliveryD) ? "" : TimeUtility.parse(deliveryD).toString());
 
             result.add(orderLine.get(OL_DIST_INFO));
             result.add(orderLine.get(OL_I_ID));

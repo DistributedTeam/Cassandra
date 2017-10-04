@@ -20,6 +20,7 @@ public enum PStatement {
     UPDATE_STOCK("UPDATE stock_item SET s_quantity = ?, s_ytd = ?, s_order_cnt = ?, s_remote_cnt = ? WHERE s_w_id = ? AND s_i_id = ? IF s_order_cnt = ?"),
     INSERT_ORDER_LINE("INSERT INTO order_line_item (ol_w_id, ol_d_id, ol_o_id, ol_number, ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_dist_info, i_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"),
     GET_CUSTOMER("SELECT c_discount, c_last, c_credit from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    UPDATE_CUSTOMER_LAST_ORDER("UPDATE customer SET c_last_order = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ? IF c_last_order <= ?"),
 
     // Payment Transaction
     GET_BALANCE_PAYMENT("SELECT c_balance, c_ytd_payment, c_payment_cnt FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),

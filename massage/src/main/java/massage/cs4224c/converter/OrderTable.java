@@ -50,7 +50,7 @@ public class OrderTable extends AbstractConverter {
 
             result.add(order.get(O_C_ID));
 
-            String carrierId = "null".equals(order.get(O_CARRIER_ID)) ? "-1" : order.get(O_CARRIER_ID);
+            String carrierId = "null".equals(order.get(O_CARRIER_ID)) ? "" : order.get(O_CARRIER_ID);
             result.add(carrierId);
 
             Long entryD = TimeUtility.parse(order.get(O_ENTRY_D));

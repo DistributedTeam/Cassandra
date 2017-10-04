@@ -65,6 +65,10 @@ public class NewOrderTransaction extends AbstractTransaction {
             throw new RuntimeException("Cannot insert order, the query is not applied");
         }
 
+        logger.info("Update customer last order");
+        QueryExecutor.getInstance().execute(PStatement.UPDATE_CUSTOMER_LAST_ORDER,
+                Lists.newArrayList(next_o_id, data.getW_ID(), data.getD_ID(), data.getC_ID(), next_o_id));
+
         double total_amount = 0;
         for (int i = 0; i < data.getOrderLines().size(); i++) {
             logger.info("Create order-line[{}]", i);
@@ -120,7 +124,7 @@ public class NewOrderTransaction extends AbstractTransaction {
 
         total_amount *= (1 + data.getD_TAX() + data.getW_TAX()) * (1 - data.getC_DISCOUNT());
 
-        logger.error("Output information now!");
+        logger.info("Output information now!");
         System.out.println(String.format("1. (W_ID: %d, D_ID: %d, C_ID, %d), C_LAST: %s, C_CREDIT: %s, C_DISCOUNT: %.4f", data.getW_ID(), data.getD_ID(), data.getC_ID(),
                 data.getC_LAST(), data.getC_CREDIT(), data.getC_DISCOUNT()));
         System.out.println(String.format("2. W_TAX: %.4f, D_TAX: %.4f", data.getW_TAX(), data.getD_TAX()));
