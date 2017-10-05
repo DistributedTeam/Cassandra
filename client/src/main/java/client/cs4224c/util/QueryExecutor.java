@@ -12,8 +12,6 @@ import java.util.function.Function;
 
 public class QueryExecutor {
 
-    private final String GLOBAL_SESSION = "_global";
-
     final Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
 
     private static QueryExecutor instance;
