@@ -1,5 +1,8 @@
 package client.cs4224c.transaction.stocklevel.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StockLevelTransactionData {
 
     private short W_ID;
@@ -9,6 +12,8 @@ public class StockLevelTransactionData {
     private int T;
 
     private int L;
+
+    private List lowStockItems = new ArrayList();
 
     public short getW_ID() {
         return W_ID;
@@ -40,5 +45,13 @@ public class StockLevelTransactionData {
 
     public void setL(int l) {
         L = l;
+    }
+
+    public List getLowStockItems() {
+        return lowStockItems;
+    }
+
+    public void setLowStockItems(List lowStockItems) {
+        this.lowStockItems = lowStockItems;
     }
 }

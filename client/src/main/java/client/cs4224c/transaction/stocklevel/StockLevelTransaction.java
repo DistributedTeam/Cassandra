@@ -45,22 +45,32 @@ public class StockLevelTransaction extends AbstractTransaction {
     public void executeFlow() {
 
         Row warehouseDistrictRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_NEXT_ORDER_NUMBER, Lists.newArrayList(data.getW_ID(), data.getD_ID()));
+        if (warehouseDistrictRow == null) {
+            throw new RuntimeException("Empty district in database.");
+        }
         int next_o_id = warehouseDistrictRow.getInt(INDEX_NEXT_O_ID);
-        int count = 0;
 
-        for (int i = next_o_id-data.getL(); i < next_o_id; i++) {
+        for (int i = next_o_id - data.getL(); i < next_o_id; i++) {
+
+            // validation of L
+            if (i <= 0)
+                continue;
+
             ResultSet orderLineItems = QueryExecutor.getInstance().execute(PStatement.GET_LAST_L_ORDER_ITEMS, Lists.newArrayList(data.getW_ID(), data.getD_ID(), i));
+            if (orderLineItems == null) {
+                throw new RuntimeException("Empty order line in database.");
+            }
             for (Row orderLineItem:orderLineItems) {
                 int i_id = orderLineItem.getInt(INDEX_I_ID);
                 Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
                 int quantity = stockItemRow.getInt(INDEX_QUANTITY);
-                if (quantity < data.getT())
-                    count++;
+                if (quantity < data.getT() && !data.getLowStockItems().contains(i_id)) // without duplicates
+                    data.getLowStockItems().add(i_id);
             }
         }
 
         logger.info("Output information now!");
 
-        System.out.println(String.format("%d", count));
+        System.out.println(String.format("%d", data.getLowStockItems().size()));
     }
 }
