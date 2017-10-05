@@ -9,7 +9,10 @@ import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
@@ -38,10 +41,10 @@ public class RandomRowPicker {
         pickRandom("item.csv", 0.03);
 
         logger.info("Begin to random pick data [order]");
-        pickRandom("order.csv", 0.1);
+        pickRandom("order.csv", 0.2);
 
         logger.info("Begin to random pick data [order-line]");
-        pickRandom("order-line.csv", 0.008);
+        pickRandom("order-line.csv", 0.3);
 
         logger.info("Begin to random pick data [stock]");
         pickRandom("stock.csv", 0.01);
@@ -76,6 +79,8 @@ public class RandomRowPicker {
 
     public static void fixIntegrityConstraint() throws Exception {
         logger.info("Begin to fix integrity constraint.");
+
+        String DELIMITER  = ",";
 
         int INDEX_W_ID = 0;
 
@@ -120,22 +125,19 @@ public class RandomRowPicker {
                 .collect(Collectors.toList());
 
         logger.info("[customer] drop all that don't have warehouse id and district id.");
-        Set<String> districtIdSet = district.stream()
-                .map(csvRecord -> csvRecord.get(INDEX_D_ID))
+        Set<String> districtSet = district.stream()
+                .map(csvRecord -> String.join(DELIMITER, csvRecord.get(INDEX_D_W_ID), csvRecord.get(INDEX_D_ID)))
                 .collect(Collectors.toCollection(HashSet::new));
         customer = customer.stream()
-                .filter(csvRecord -> warehouseIdSet.contains(csvRecord.get(INDEX_C_W_ID))
-                        && districtIdSet.contains(csvRecord.get(INDEX_C_D_ID)))
+                .filter(csvRecord -> districtSet.contains(String.join(DELIMITER, csvRecord.get(INDEX_C_W_ID), csvRecord.get(INDEX_C_D_ID))))
                 .collect(Collectors.toList());
 
         logger.info("[order] drop all that don't have warehouse id and district id and customer id.");
-        Set<String> customerIdSet = customer.stream()
-                .map(csvRecord -> csvRecord.get(INDEX_C_ID))
+        Set<String> customerSet = customer.stream()
+                .map(csvRecord -> String.join(DELIMITER, csvRecord.get(INDEX_C_W_ID), csvRecord.get(INDEX_C_D_ID), csvRecord.get(INDEX_C_ID)))
                 .collect(Collectors.toCollection(HashSet::new));
         order = order.stream()
-                .filter(csvRecord -> warehouseIdSet.contains(csvRecord.get(INDEX_O_W_ID))
-                        && districtIdSet.contains(csvRecord.get(INDEX_O_D_ID))
-                        && customerIdSet.contains(csvRecord.get(INDEX_O_C_ID)))
+                .filter(csvRecord -> customerSet.contains(String.join(DELIMITER, csvRecord.get(INDEX_O_W_ID), csvRecord.get(INDEX_O_D_ID), csvRecord.get(INDEX_O_C_ID))))
                 .collect(Collectors.toList());
 
         logger.info("[item] don't need to do anything.");
@@ -144,23 +146,20 @@ public class RandomRowPicker {
                 .collect(Collectors.toCollection(HashSet::new));
 
         logger.info("[order-line] drop all that don't have warehouse id and district id and order id.");
-        Set<String> orderIdSet = order.stream()
-                .map(csvRecord -> csvRecord.get(INDEX_O_ID))
+        Set<String> orderSet = order.stream()
+                .map(csvRecord -> String.join(DELIMITER, csvRecord.get(INDEX_O_W_ID), csvRecord.get(INDEX_O_D_ID), csvRecord.get(INDEX_O_ID)))
                 .collect(Collectors.toCollection(HashSet::new));
         orderLine = orderLine.stream()
-                .filter(csvRecord -> warehouseIdSet.contains(csvRecord.get(INDEX_OL_W_ID))
-                        && districtIdSet.contains(csvRecord.get(INDEX_OL_D_ID))
-                        && orderIdSet.contains(csvRecord.get(INDEX_OL_O_ID))
-                        && itemIdSet.contains(csvRecord.get(INDEX_OL_I_ID))
-                )
+                .filter(csvRecord -> orderSet.contains(String.join(DELIMITER, csvRecord.get(INDEX_OL_W_ID), csvRecord.get(INDEX_OL_D_ID), csvRecord.get(INDEX_OL_O_ID)))
+                        && itemIdSet.contains(csvRecord.get(INDEX_OL_I_ID)))
                 .collect(Collectors.toList());
 
         logger.info("[order-with-order-line] drop all that don't have order id in orderLine.");
         Set<String> orderLineOrderNumber = orderLine.stream()
-                .map(csvRecord -> csvRecord.get(INDEX_OL_O_ID))
+                .map(csvRecord -> String.join(DELIMITER, csvRecord.get(INDEX_OL_W_ID), csvRecord.get(INDEX_OL_D_ID), csvRecord.get(INDEX_OL_O_ID)))
                 .collect(Collectors.toCollection(HashSet::new));
         order = order.stream()
-                .filter(csvRecord -> orderLineOrderNumber.contains(csvRecord.get(INDEX_O_ID)))
+                .filter(csvRecord -> orderLineOrderNumber.contains(String.join(DELIMITER, csvRecord.get(INDEX_O_W_ID), csvRecord.get(INDEX_O_D_ID), csvRecord.get(INDEX_O_ID))))
                 .collect(Collectors.toList());
 
         logger.info("[stock] drop all that don't have warehouse id and item id.");

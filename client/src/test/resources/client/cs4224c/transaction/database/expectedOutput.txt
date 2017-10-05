@@ -1,6 +1,6 @@
-(a). select sum(W_YTD) from Warehouse : 38410.0000
-(b). select sum(D_YTD), sum(D_NEXT_O_ID) from District : 38410.0000, 160
-(c). select sum(C_BALANCE), sum(C_YTD_PAYMENT), sum(C_PAYMENT CNT), sum(C_DELIVERY_CNT) from Customer : -38410.0000, 38410.0000, 3841, 0
-(d). select max(O_ID), sum(O_OL_CNT) from Order : 3000, 163007
-(e). select sum(OL_AMOUNT), sum(OL_QUANTITY) from Order-Line : 2024872.1300, 7040
-(f). select sum(S_QUANTITY), sum(S_YTD), sum(S_ORDER_CNT), sum(S_REMOTE_CNT) from Stock: 25211, 0.00, 0, 0
+(a). select sum(W_YTD) from Warehouse : 39090.0000
+(b). select sum(D_YTD), sum(D_NEXT_O_ID) from District : 39090.0000, 160
+(c). select sum(C_BALANCE), sum(C_YTD_PAYMENT), sum(C_PAYMENT CNT), sum(C_DELIVERY_CNT) from Customer : -39090.0000, 39090.0000, 3909, 0
+(d). select max(O_ID), sum(O_OL_CNT) from Order : 2985, 1305
+(e). select sum(OL_AMOUNT), sum(OL_QUANTITY) from Order-Line : 154105.9100, 495
+(f). select sum(S_QUANTITY), sum(S_YTD), sum(S_ORDER_CNT), sum(S_REMOTE_CNT) from Stock: 27155, 0.00, 0, 0

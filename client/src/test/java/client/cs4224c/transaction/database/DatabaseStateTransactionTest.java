@@ -22,6 +22,6 @@ public class DatabaseStateTransactionTest extends BaseTransactionTest {
     @Test
     public void testDatabaseState() throws IOException {
         new DatabaseStateTransaction().executeFlow();
-        this.validateSystemOutput("expectedOutput.txt");
+        this.validateSystemOutput("expectedOutput.txt", "");
     }
 }
