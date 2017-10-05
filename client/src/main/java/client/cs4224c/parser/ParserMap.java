@@ -11,6 +11,7 @@ public class ParserMap {
         parserMap = new HashMap<>();
         parserMap.put("N", NewOrderParser.class);
         parserMap.put("P", PaymentParser.class);
+        parserMap.put("D", DeliveryParser.class);
         parserMap.put("T", TopBalanceParser.class);
     }
 
