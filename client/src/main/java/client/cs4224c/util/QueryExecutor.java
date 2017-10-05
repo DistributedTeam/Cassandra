@@ -65,6 +65,9 @@ public class QueryExecutor {
         int count = 1;
         while (true) {
             result = executeAndGetOneRow(getStatement, getArgs);
+            if (result == null) {
+                throw new IllegalArgumentException(String.format("%s with args %s returns empty row.", getStatement, getArgs));
+            }
             List<Object> newUpdateArgs = Lists.newArrayList();
             newUpdateArgs.addAll(updateFunc.apply(result));
             newUpdateArgs.addAll(updateArgs);

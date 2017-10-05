@@ -32,10 +32,11 @@ public enum PStatement {
     GET_MIN_ORDER_ID_WITH_NULL_CARRIER_ID("SELECT dt_min_ud_o_id FROM delivery_transaction WHERE dt_w_id = ? AND dt_d_id = ?"),
     UPDATE_MIN_ORDER_ID_WITH_NULL_CARRIER_ID("UPDATE delivery_transaction SET dt_min_ud_o_id = ? WHERE dt_w_id = ? AND dt_d_id = ? IF dt_min_ud_o_id = ?"),
     GET_CUSTOMER_ID_FROM_ORDER("SELECT o_c_id FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? and o_id = ?"),
-    GET_ORDER_LINES("SELECT ol_number FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
+    UPDATE_ORDER_CARRIER_ID("UPDATE order_by_o_id SET o_carrier_id = ? WHERE o_w_id = ? AND o_d_id = ? and o_id = ?"),
+    GET_ORDER_LINES("SELECT ol_number, ol_amount FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
     UPDATE_ORDER_LINES_DELIVERY_DATE("UPDATE order_line_item SET ol_delivery_d = ? WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ? and ol_number = ?"),
     GET_CUSTOMER_BALANCE_AND_DELIVERY_COUNT("SELECT c_balance, c_delivery_cnt FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
-
+    UPDATE_CUSTOMER_BALANCE_AND_DELIVERY_COUNT("UPDATE customer SET c_balance = ?, c_delivery_cnt = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ? IF c_delivery_cnt = ?"),
 
     // Top Balance Transaction
     GET_W_ID_D_ID_W_NAME_D_NAME("SELECT d_w_id, d_id, w_name, d_name FROM warehouse_district"),

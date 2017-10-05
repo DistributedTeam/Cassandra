@@ -40,40 +40,42 @@ public class DeliveryTransaction extends AbstractTransaction{
 
     @Override
     public void executeFlow() {
-        for (short O_D_ID = 1; O_D_ID < 11; O_D_ID++) {
-            Row minUndeliveredOrderIdRow = QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.GET_MIN_ORDER_ID_WITH_NULL_CARRIER_ID, Lists.newArrayList(data.getW_ID(), O_D_ID),
-                    PStatement.UPDATE_MIN_ORDER_ID_WITH_NULL_CARRIER_ID,
-                    Lists.newArrayList(data.getW_ID(), O_D_ID),
-                    row ->Collections.singletonList(row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID)+1),
-                    row -> row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID));
+        for (short O_D_ID = 1; O_D_ID <= 10; O_D_ID++) {
+            Row minUndeliveredOrderIdRow = null;
+            try {
+                minUndeliveredOrderIdRow = QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.GET_MIN_ORDER_ID_WITH_NULL_CARRIER_ID, Lists.newArrayList(data.getW_ID(), O_D_ID),
+                        PStatement.UPDATE_MIN_ORDER_ID_WITH_NULL_CARRIER_ID, Lists.newArrayList(data.getW_ID(), O_D_ID),
+                        row -> Collections.singletonList(row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID) + 1),
+                        row -> row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID));
+            } catch (IllegalArgumentException exception) {
+                logger.error("No order for W_ID: {}, D_ID: {}, it doesn't make sense to make delivery transaction", data.getW_ID(), O_D_ID);
+                continue;
+            }
+
             int minUndeliveredOrderId = minUndeliveredOrderIdRow.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID);
+
+            QueryExecutor.getInstance().execute(PStatement.UPDATE_ORDER_CARRIER_ID, Lists.newArrayList(data.getCARRIER_ID(), data.getW_ID(), O_D_ID, minUndeliveredOrderId));
             int customerId = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_ID_FROM_ORDER, Lists.newArrayList(data.getW_ID(), O_D_ID, minUndeliveredOrderId)).getInt(INDEX_CUSTOMER_ID);
+
             ResultSet orderLines = QueryExecutor.getInstance().execute(PStatement.GET_ORDER_LINES, Lists.newArrayList(data.getW_ID(), O_D_ID, minUndeliveredOrderId));
-            int orderLineAmount = 0;
+            double orderLineAmount = 0;
             for(Row orderLine : orderLines) {
-                orderLineAmount += orderLine.getInt(INDEX_ORDER_LINE_AMOUNT);
+                orderLineAmount += orderLine.getDouble(INDEX_ORDER_LINE_AMOUNT);
                 int orderLineNumber = orderLine.getInt(INDEX_ORDER_LINE_NUMBER);
                 QueryExecutor.getInstance().execute(PStatement.UPDATE_ORDER_LINES_DELIVERY_DATE, Lists.newArrayList(new Date(), data.getW_ID(), O_D_ID, minUndeliveredOrderId, orderLineNumber));
             }
-            int totalOrderLineAmount = orderLineAmount;
+
+            double totalOrderLineAmount = orderLineAmount;
             QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.GET_CUSTOMER_BALANCE_AND_DELIVERY_COUNT, Lists.newArrayList(data.getW_ID(), O_D_ID, customerId),
                     PStatement.UPDATE_CUSTOMER_BALANCE_AND_DELIVERY_COUNT,
                     Lists.newArrayList(data.getW_ID(), O_D_ID, customerId),
                     row -> {
                         List<Object> values = Lists.newArrayList();
-                            if (row.getDouble(INDEX_CUSTOMER_BALANCE) != (Double) null) {
-                                values.add(row.getDouble(INDEX_CUSTOMER_BALANCE) + totalOrderLineAmount);
-                            } else {
-                                values.add(null);
-                            }
-                            if (row.getInt(INDEX_CUSTOMER_DELIVERY_COUNT) != (Integer) null) {
-                                values.add(row.getInt(INDEX_CUSTOMER_DELIVERY_COUNT) + 1);
-                            } else {
-                                values.add(null);
-                            }
+                        values.add(row.getDouble(INDEX_CUSTOMER_BALANCE) + totalOrderLineAmount);
+                        values.add(row.getInt(INDEX_CUSTOMER_DELIVERY_COUNT) + 1);
                         return values;
                     },
-                    row -> row == null || row.getInt(INDEX_CUSTOMER_DELIVERY_COUNT) == (Integer) null ? null : row.getInt(INDEX_CUSTOMER_DELIVERY_COUNT));
+                    row -> row.getInt(INDEX_CUSTOMER_DELIVERY_COUNT));
         }
     }
 }
