@@ -24,13 +24,13 @@ public class PaymentTransactionTest extends BaseTransactionTest {
 
         logger.info("Begin to validate database for PaymentTransaction");
 
-        ResultSet customer = QueryExecutor.getInstance().execute("SELECT c_balance, c_ytd_payment, c_payment_cnt FROM customer WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 351");
+        ResultSet customer = QueryExecutor.getInstance().execute("SELECT c_balance, c_ytd_payment, c_payment_cnt FROM customer WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 105");
         Assert.assertEquals("Row[-1944.29, 1944.29, 2]", customer.one().toString());
 
         logger.info("End: Validate database for PaymentTransaction");
 
         logger.info("Begin to validate System output");
-        validateSystemOutput("expectedCase1.txt");
+        validateSystemOutput("expectedCase1.txt", "");
         logger.info("End: Validate System output");
     }
 }

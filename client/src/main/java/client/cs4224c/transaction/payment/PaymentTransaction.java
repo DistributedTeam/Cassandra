@@ -78,5 +78,6 @@ public class PaymentTransaction extends AbstractTransaction {
                 warehouseAddress.getString("street_1"), warehouseAddress.getString("street_2"), warehouseAddress.getString("city"), warehouseAddress.getString("state"), warehouseAddress.getString("zip")));
         System.out.println(String.format("3. District: %s, %s, %s, %s, %s",
                 districtAddress.getString("street_1"), districtAddress.getString("street_2"), districtAddress.getString("city"), districtAddress.getString("state"), districtAddress.getString("zip")));
+        System.out.println(String.format("4. PAYMENT: %.4f", data.getPAYMENT()));
     }
 }

@@ -1,5 +1,6 @@
 package client.cs4224c.transaction.neworder;
 
+import client.cs4224c.util.TimeUtility;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.google.common.collect.Lists;
@@ -59,8 +60,9 @@ public class NewOrderTransaction extends AbstractTransaction {
         logger.info("Get the D_NEXT_O_ID and update it with retry already {}", next_o_id);
 
         logger.info("Create new order");
+        data.setO_ENTRY_D(new Date());
         ResultSet resultSet = QueryExecutor.getInstance().execute(PStatement.INSERT_ORDER,
-                Lists.newArrayList(next_o_id, data.getD_ID(), data.getW_ID(), data.getC_ID(), new Date(), data.getOrderLines().size(), data.isAllLocal()));
+                Lists.newArrayList(next_o_id, data.getD_ID(), data.getW_ID(), data.getC_ID(), data.getO_ENTRY_D(), data.getOrderLines().size(), data.isAllLocal()));
         if (!resultSet.wasApplied()) {
             throw new RuntimeException("Cannot insert order, the query is not applied");
         }
@@ -128,8 +130,9 @@ public class NewOrderTransaction extends AbstractTransaction {
         System.out.println(String.format("1. (W_ID: %d, D_ID: %d, C_ID, %d), C_LAST: %s, C_CREDIT: %s, C_DISCOUNT: %.4f", data.getW_ID(), data.getD_ID(), data.getC_ID(),
                 data.getC_LAST(), data.getC_CREDIT(), data.getC_DISCOUNT()));
         System.out.println(String.format("2. W_TAX: %.4f, D_TAX: %.4f", data.getW_TAX(), data.getD_TAX()));
-        System.out.println(String.format("3. NUM_ITEMS: %s, TOTAL_AMOUNT: %.4f", data.getOrderLines().size(), total_amount));
-        System.out.println("4. DETAILS OF ITEMS");
+        System.out.println(String.format("3. O_ID: %d, O_ENTRY_D: %s", next_o_id, TimeUtility.format(data.getO_ENTRY_D())));
+        System.out.println(String.format("4. NUM_ITEMS: %s, TOTAL_AMOUNT: %.4f", data.getOrderLines().size(), total_amount));
+        System.out.println("5. DETAILS OF ITEMS");
         for (NewOrderTransactionOrderLine orderLine : data.getOrderLines()) {
             System.out.println(String.format("\t ITEM_NUMBER: %s, I_NAME: %s, SUPPLIER_WAREHOUSE: %d, QUANTITY: %d, OL_AMOUNT: %.4f, S_QUANTITY: %d",
                     orderLine.getOL_I_ID(), orderLine.getI_NAME(), orderLine.getOL_SUPPLY_W_ID(), orderLine.getOL_QUANTITY(), orderLine.getOL_AMOUNT(), orderLine.getS_QUANTITY()));

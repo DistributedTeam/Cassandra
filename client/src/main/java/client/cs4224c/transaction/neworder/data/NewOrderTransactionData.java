@@ -1,5 +1,6 @@
 package client.cs4224c.transaction.neworder.data;
 
+import java.util.Date;
 import java.util.List;
 
 public class NewOrderTransactionData {
@@ -19,6 +20,8 @@ public class NewOrderTransactionData {
     private double C_DISCOUNT;
     private String C_CREDIT;
     private String C_LAST;
+
+    private Date O_ENTRY_D;
 
 
     public int getC_ID() {
@@ -107,5 +110,13 @@ public class NewOrderTransactionData {
 
     public void setC_LAST(String c_LAST) {
         C_LAST = c_LAST;
+    }
+
+    public Date getO_ENTRY_D() {
+        return O_ENTRY_D;
+    }
+
+    public void setO_ENTRY_D(Date o_ENTRY_D) {
+        O_ENTRY_D = o_ENTRY_D;
     }
 }
