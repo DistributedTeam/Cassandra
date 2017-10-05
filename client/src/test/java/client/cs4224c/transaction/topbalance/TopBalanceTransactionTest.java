@@ -22,7 +22,7 @@ public class TopBalanceTransactionTest extends BaseTransactionTest {
     public void testCase1() throws Exception {
         this.executeFlowWithData("case1.txt");
         logger.info("Begin to validate System output");
-        validateSystemOutput("expectedCase1.txt");
+        validateSystemOutput("expectedCase1.txt", "");
         logger.info("End: Validate System output");
     }
 }
