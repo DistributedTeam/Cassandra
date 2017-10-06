@@ -24,7 +24,7 @@ public class StockLevelTransactionTest extends BaseTransactionTest {
 
         logger.info("Begin to validate System output");
 
-        this.validateSystemOutput("expectedCase1.txt");
+        this.validateSystemOutput("expectedCase1.txt", "");
 
         logger.info("End: Validate System output");
     }

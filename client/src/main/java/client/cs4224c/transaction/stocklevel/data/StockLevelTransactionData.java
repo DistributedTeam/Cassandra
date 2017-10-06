@@ -13,7 +13,7 @@ public class StockLevelTransactionData {
 
     private int L;
 
-    private List lowStockItems = new ArrayList();
+    private List<Integer> lowStockItems = new ArrayList<Integer>();
 
     public short getW_ID() {
         return W_ID;
@@ -47,11 +47,11 @@ public class StockLevelTransactionData {
         L = l;
     }
 
-    public List getLowStockItems() {
+    public List<Integer> getLowStockItems() {
         return lowStockItems;
     }
 
-    public void setLowStockItems(List lowStockItems) {
+    public void setLowStockItems(List<Integer> lowStockItems) {
         this.lowStockItems = lowStockItems;
     }
 }

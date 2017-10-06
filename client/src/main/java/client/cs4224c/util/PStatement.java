@@ -46,7 +46,7 @@ public enum PStatement {
     // Stock-Level Transaction
     GET_NEXT_ORDER_NUMBER("SELECT d_next_o_id FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
     GET_LAST_L_ORDER_ITEMS("SELECT ol_i_id FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
-    GET_STOCK_QUANTITY("SELECT s_quantity FROM stock_item WHERE s_w_id = ? AND s_i_id = ?");
+    GET_STOCK_QUANTITY("SELECT s_quantity FROM stock_item WHERE s_w_id = ? AND s_i_id = ?"),
 
     // Top Balance Transaction
     GET_W_ID_D_ID_W_NAME_D_NAME("SELECT d_w_id, d_id, w_name, d_name FROM warehouse_district"),

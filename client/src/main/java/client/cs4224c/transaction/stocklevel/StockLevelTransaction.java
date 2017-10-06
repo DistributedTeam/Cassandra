@@ -53,19 +53,24 @@ public class StockLevelTransaction extends AbstractTransaction {
         for (int i = next_o_id - data.getL(); i < next_o_id; i++) {
 
             // validation of L
-            if (i <= 0)
+            if (i <= 0) {
+                logger.warn("No more orders for warehouse {} district {} already.", data.getW_ID(), data.getD_ID());
                 continue;
+            }
 
             ResultSet orderLineItems = QueryExecutor.getInstance().execute(PStatement.GET_LAST_L_ORDER_ITEMS, Lists.newArrayList(data.getW_ID(), data.getD_ID(), i));
-            if (orderLineItems == null) {
-                throw new RuntimeException("Empty order line in database.");
+            if (!orderLineItems.iterator().hasNext()) {
+                logger.warn("NEXT_O_ID is not consecutive as orderLine cannot be find in database [{}, {}, {}].", data.getW_ID(), data.getD_ID(), i);
+                continue;
             }
-            for (Row orderLineItem:orderLineItems) {
+            for (Row orderLineItem : orderLineItems) {
                 int i_id = orderLineItem.getInt(INDEX_I_ID);
                 Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
                 int quantity = stockItemRow.getInt(INDEX_QUANTITY);
-                if (quantity < data.getT() && !data.getLowStockItems().contains(i_id)) // without duplicates
+                if (quantity < data.getT() && !data.getLowStockItems().contains(i_id)) {
+                    // without duplicates
                     data.getLowStockItems().add(i_id);
+                }
             }
         }
 
