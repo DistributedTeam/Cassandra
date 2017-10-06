@@ -1,13 +1,13 @@
 package client.cs4224c.transaction.payment;
 
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.UDTValue;
-import com.google.common.collect.Lists;
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.payment.data.PaymentTransactionData;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
 import client.cs4224c.util.TimeUtility;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.UDTValue;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

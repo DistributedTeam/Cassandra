@@ -1,9 +1,9 @@
 package client.cs4224c.transaction.neworder;
 
-import com.datastax.driver.core.ResultSet;
 import client.cs4224c.parser.NewOrderParser;
 import client.cs4224c.transaction.BaseTransactionTest;
 import client.cs4224c.util.QueryExecutor;
+import com.datastax.driver.core.ResultSet;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

@@ -1,22 +1,19 @@
 package client.cs4224c.transaction.topbalance;
 
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.UDTValue;
-import com.google.common.collect.Lists;
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.topbalance.data.CustomerData;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
-import client.cs4224c.util.TimeUtility;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class TopBalanceTransaction extends AbstractTransaction {
 

@@ -13,6 +13,7 @@ public class ParserMap {
         parserMap.put("P", PaymentParser.class);
         parserMap.put("D", DeliveryParser.class);
         parserMap.put("T", TopBalanceParser.class);
+        parserMap.put("O", OrderStatusParser.class);
     }
 
     public static Class<? extends AbstractParser> get(String command) {

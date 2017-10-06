@@ -1,14 +1,14 @@
 package client.cs4224c.transaction.neworder;
 
-import client.cs4224c.util.TimeUtility;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.google.common.collect.Lists;
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.neworder.data.NewOrderTransactionData;
 import client.cs4224c.transaction.neworder.data.NewOrderTransactionOrderLine;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
+import client.cs4224c.util.TimeUtility;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
