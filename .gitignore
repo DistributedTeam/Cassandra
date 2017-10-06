@@ -13,6 +13,7 @@ test-data/database-data/*
 !test-data/database-data/.gitkeep
 test-data/project-files/data-files/temp/*
 !test-data/project-files/data-files/temp/.gitkeep
+local.properties
 
 build/
 /massage/build/

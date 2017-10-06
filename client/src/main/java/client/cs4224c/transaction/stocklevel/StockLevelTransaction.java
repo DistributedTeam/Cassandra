@@ -1,20 +1,14 @@
 package client.cs4224c.transaction.stocklevel;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.UDTValue;
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.stocklevel.data.StockLevelTransactionData;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
-import client.cs4224c.util.TimeUtility;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StockLevelTransaction extends AbstractTransaction {
 

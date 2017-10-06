@@ -1,10 +1,10 @@
 package importtask.cs4224c.task;
 
 import com.datastax.driver.core.ResultSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import importtask.cs4224c.util.ProjectConfig;
 import importtask.cs4224c.util.QueryExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreateKeyspaceTask implements Runnable {
 
