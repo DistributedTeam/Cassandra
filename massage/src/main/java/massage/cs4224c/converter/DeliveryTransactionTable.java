@@ -2,7 +2,6 @@ package massage.cs4224c.converter;
 
 import com.google.common.collect.Lists;
 import massage.cs4224c.util.ProjectConfig;
-import massage.cs4224c.util.TimeUtility;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;

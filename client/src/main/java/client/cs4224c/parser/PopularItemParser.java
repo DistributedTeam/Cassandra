@@ -1,10 +1,10 @@
 package client.cs4224c.parser;
 
-import java.util.Scanner;
-
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.popularitem.PopularItemTransaction;
 import client.cs4224c.transaction.popularitem.data.PopularItemTransactionData;
+
+import java.util.Scanner;
 
 public class PopularItemParser extends AbstractParser {
 

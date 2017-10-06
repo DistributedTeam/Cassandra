@@ -1,11 +1,10 @@
 package client.cs4224c.transaction.popularitem;
 
+import client.cs4224c.parser.PopularItemParser;
+import client.cs4224c.transaction.BaseTransactionTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import client.cs4224c.parser.PopularItemParser;
-import client.cs4224c.transaction.BaseTransactionTest;
 
 public class PopularItemTransactionTest extends BaseTransactionTest {
 
@@ -20,7 +19,7 @@ public class PopularItemTransactionTest extends BaseTransactionTest {
         this.executeFlowWithData("case1.txt");
 
         logger.info("Begin to validate System output");
-        validateSystemOutput("expectedCase1.txt");
+        validateSystemOutput("expectedCase1.txt", "");
         logger.info("End: Validate System output");
     }
 }

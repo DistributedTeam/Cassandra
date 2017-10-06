@@ -1,11 +1,10 @@
 package client.cs4224c.transaction.stocklevel;
 
+import client.cs4224c.parser.StockLevelParser;
+import client.cs4224c.transaction.BaseTransactionTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import client.cs4224c.parser.StockLevelParser;
-import client.cs4224c.transaction.BaseTransactionTest;
 
 public class StockLevelTransactionTest extends BaseTransactionTest {
     private final Logger logger = LoggerFactory.getLogger(StockLevelTransactionTest.class);

@@ -1,12 +1,10 @@
 package client.cs4224c.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.stocklevel.StockLevelTransaction;
 import client.cs4224c.transaction.stocklevel.data.StockLevelTransactionData;
+
+import java.util.Scanner;
 
 public class StockLevelParser extends AbstractParser {
 
