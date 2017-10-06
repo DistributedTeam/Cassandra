@@ -1,7 +1,5 @@
 package client.cs4224c.transaction.topbalance.data;
 
-import java.util.List;
-
 public class CustomerData {
 
     private String W_NAME;

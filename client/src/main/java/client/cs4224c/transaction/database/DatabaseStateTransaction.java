@@ -1,8 +1,8 @@
 package client.cs4224c.transaction.database;
 
-import com.datastax.driver.core.Row;
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.util.QueryExecutor;
+import com.datastax.driver.core.Row;
 
 public class DatabaseStateTransaction extends AbstractTransaction {
 

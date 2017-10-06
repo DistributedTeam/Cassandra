@@ -1,6 +1,5 @@
 package client.cs4224c.transaction;
 
-import client.cs4224c.transaction.neworder.NewOrderTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

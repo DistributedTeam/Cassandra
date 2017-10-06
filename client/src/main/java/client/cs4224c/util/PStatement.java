@@ -38,6 +38,12 @@ public enum PStatement {
     GET_CUSTOMER_BALANCE_AND_DELIVERY_COUNT("SELECT c_balance, c_delivery_cnt FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     UPDATE_CUSTOMER_BALANCE_AND_DELIVERY_COUNT("UPDATE customer SET c_balance = ?, c_delivery_cnt = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ? IF c_delivery_cnt = ?"),
 
+    // OrderStatus Transaction
+    GET_CUSTOMER_NAME_AND_BALANCE("SELECT c_first, c_middle, c_last, c_balance, c_last_order from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_CUSTOMER_LAST_ORDER("SELECT o_entry_d, o_carrier_id FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?"),
+    GET_ORDER_LINES_FOR_LAST_ORDER("SELECT ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
+
+
     // Top Balance Transaction
     GET_W_ID_D_ID_W_NAME_D_NAME("SELECT d_w_id, d_id, w_name, d_name FROM warehouse_district"),
     GET_TOP_BALANCE_CUSTOMER("SELECT c_first, c_middle, c_last, c_balance FROM customer_balance WHERE c_w_id = ? AND c_d_id = ? ORDER BY c_balance DESC LIMIT 10");
