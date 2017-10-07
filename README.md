@@ -35,8 +35,6 @@ Run command `gradlew massage:run`.
 
 ### Import Data To Project
 
-
-
 Make sure `gradlew massage:run` command is executed successfully before this step.
 
 Run Cassandra on chosen IP address. Refer to [Apache Cassandra Documentation v4.0](http://cassandra.apache.org/doc/latest/) for more details.
@@ -118,7 +116,7 @@ Format
 Format
 
      T     
-> Find the top-10 customers ranked in descending order of their outstanding balance payments.
+> Find the top 10 customers ranked in descending order of their outstanding balance payments.
 
 ### Verification
 
