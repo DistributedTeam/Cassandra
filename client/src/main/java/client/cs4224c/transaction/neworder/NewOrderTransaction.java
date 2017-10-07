@@ -8,6 +8,7 @@ import client.cs4224c.util.QueryExecutor;
 import client.cs4224c.util.TimeUtility;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
+import com.datastax.driver.core.exceptions.CodecNotFoundException;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +101,14 @@ public class NewOrderTransaction extends AbstractTransaction {
                 throw new RuntimeException("Empty stock row!");
             }
 
-            double itemPrice = stockRow.getDouble(INDEX_STOCK_ITEM_PRICE);
+            double itemPrice;
+            try {
+                itemPrice = stockRow.getDouble(INDEX_STOCK_ITEM_PRICE);
+            } catch (CodecNotFoundException codecNotFoundException) {
+                // bug for the driver?
+                itemPrice = stockRow.getInt(INDEX_STOCK_ITEM_PRICE);
+            }
+
             String distInfo = stockRow.getString(INDEX_STOCK_DIST_INFO);
             orderLine.setI_NAME(stockRow.getString(INDEX_STOCK_ITEM_NAME));
 

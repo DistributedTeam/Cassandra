@@ -2,6 +2,7 @@ package client.cs4224c.transaction.delivery;
 
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.delivery.data.DeliveryTransactionData;
+import client.cs4224c.util.Constant;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
 import com.datastax.driver.core.ResultSet;
@@ -45,17 +46,26 @@ public class DeliveryTransaction extends AbstractTransaction{
             try {
                 minUndeliveredOrderIdRow = QueryExecutor.getInstance().getAndUpdateWithRetry(PStatement.GET_MIN_ORDER_ID_WITH_NULL_CARRIER_ID, Lists.newArrayList(data.getW_ID(), O_D_ID),
                         PStatement.UPDATE_MIN_ORDER_ID_WITH_NULL_CARRIER_ID, Lists.newArrayList(data.getW_ID(), O_D_ID),
-                        row -> Collections.singletonList(row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID) + 1),
+                        row -> {
+                            if (row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID) == Constant.INVALID_O_ID) {
+                                throw new IllegalArgumentException(); // no order for the district yet
+                            }
+                            return Collections.singletonList(row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID) + 1);
+                        },
                         row -> row.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID));
             } catch (IllegalArgumentException exception) {
-                logger.error("No order for W_ID: {}, D_ID: {}, it doesn't make sense to make delivery transaction", data.getW_ID(), O_D_ID);
+                logger.warn("No order/unDeliveredOrder for W_ID: {}, D_ID: {}, it doesn't make sense to make delivery transaction", data.getW_ID(), O_D_ID);
                 continue;
             }
 
             int minUndeliveredOrderId = minUndeliveredOrderIdRow.getInt(INDEX_MIN_UNDELIVERED_ORDER_ID);
 
             QueryExecutor.getInstance().execute(PStatement.UPDATE_ORDER_CARRIER_ID, Lists.newArrayList(data.getCARRIER_ID(), data.getW_ID(), O_D_ID, minUndeliveredOrderId));
-            int customerId = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_ID_FROM_ORDER, Lists.newArrayList(data.getW_ID(), O_D_ID, minUndeliveredOrderId)).getInt(INDEX_CUSTOMER_ID);
+            Row customerRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_ID_FROM_ORDER, Lists.newArrayList(data.getW_ID(), O_D_ID, minUndeliveredOrderId));
+            if (customerRow.isNull(INDEX_CUSTOMER_ID)) {
+                throw new RuntimeException(String.format("Empty customer from the order %d, %d, %d", data.getW_ID(), O_D_ID, minUndeliveredOrderId));
+            }
+            int customerId = customerRow.getInt(INDEX_CUSTOMER_ID);
 
             ResultSet orderLines = QueryExecutor.getInstance().execute(PStatement.GET_ORDER_LINES, Lists.newArrayList(data.getW_ID(), O_D_ID, minUndeliveredOrderId));
             double orderLineAmount = 0;
