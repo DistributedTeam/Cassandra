@@ -28,7 +28,7 @@ public class Client {
             AbstractParser parser = parserClass.newInstance();
             AbstractTransaction transaction = parser.parse(sc, arguments);
 
-            System.out.println(transaction);
+            transaction.execute();
         }
 
 

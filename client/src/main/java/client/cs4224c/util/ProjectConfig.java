@@ -17,6 +17,7 @@ public class ProjectConfig {
     private static final String CASSANDRA_IP = "cassandra.ip";
     private static final String CASSANDRA_KEYSPACE = "cassandra.keyspace";
     private static final String MAX_IF_UPDATE_TRY = "max.if.update.try";
+    private static final String TRANSACTION_FILE_FOLDER = "transaction.file.folder";
 
     private static ProjectConfig instance;
 
@@ -74,5 +75,9 @@ public class ProjectConfig {
 
     public int getMaxIfUpdateTry() {
         return configuration.getInt(MAX_IF_UPDATE_TRY);
+    }
+
+    public String getTransactionFileFolder() {
+        return configuration.getString(TRANSACTION_FILE_FOLDER);
     }
 }

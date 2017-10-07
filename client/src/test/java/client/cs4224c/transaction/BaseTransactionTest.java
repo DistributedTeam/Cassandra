@@ -74,12 +74,14 @@ public class BaseTransactionTest {
         return transaction;
     }
 
-    protected void validateSystemOutput(String expectedContentFileName, String regexToIgnore) throws IOException {
+    protected void validateSystemOutput(String expectedContentFileName, String... regexToIgnore) throws IOException {
         String systemOut = baos.toString();
-        systemOut = systemOut.replaceAll(regexToIgnore, "");
-
         String expectedOut = IOUtils.toString(this.getClass().getResourceAsStream(expectedContentFileName));
-        expectedOut = expectedOut.replaceAll(regexToIgnore, "");
+
+        for (String regex : regexToIgnore) {
+            systemOut = systemOut.replaceAll(regex, "");
+            expectedOut = expectedOut.replaceAll(regex, "");
+        }
 
         // compare without any line-breaker
         Assert.assertEquals(

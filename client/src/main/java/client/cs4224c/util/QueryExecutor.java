@@ -1,6 +1,7 @@
 package client.cs4224c.util;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +31,13 @@ public class QueryExecutor {
     private Session session;
 
     private QueryExecutor() {
+        reload();
+    }
+
+    public void reload() {
         cluster = Cluster.builder()
                 .addContactPoint(ProjectConfig.getInstance().getCassandraIp())
+                .withLoadBalancingPolicy(new RoundRobinPolicy())
                 .build();
         session = cluster.connect(ProjectConfig.getInstance().getCassandraKeyspace());
         initialize();

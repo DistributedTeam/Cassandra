@@ -1,0 +1,32 @@
+package client.cs4224c;
+
+import client.cs4224c.parser.AbstractParser;
+import client.cs4224c.transaction.AbstractTransaction;
+import client.cs4224c.transaction.BaseTransactionTest;
+import client.cs4224c.util.QueryExecutor;
+import org.junit.Test;
+
+import java.util.regex.Pattern;
+
+public class ExperimentClientTest extends BaseTransactionTest {
+
+    public ExperimentClientTest() {
+        super(AbstractParser.class);
+    }
+
+    @Override
+    protected AbstractTransaction executeFlowWithData(String dataFileName) throws Exception {
+        throw new UnsupportedOperationException("This test is just to verify ExperimentClient");
+    }
+
+    @Test
+    public void testMain_typicalCase() throws Exception {
+        ExperimentClient.main(new String[] {"1.txt"});
+
+        // reload connection as the experiment client closes the connection
+        QueryExecutor.getInstance().reload();
+
+        validateSystemOutput("expectedExperimentClientOutput.txt",
+                ", O_ENTRY_D.+", " \\(seconds\\):.+", " throughput:.+");
+    }
+}
