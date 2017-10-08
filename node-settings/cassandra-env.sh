@@ -295,3 +295,4 @@ JVM_OPTS="$JVM_OPTS $MX4J_ADDRESS"
 JVM_OPTS="$JVM_OPTS $MX4J_PORT"
 JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS"
 
+JVM_OPTS="$JVM_OPTS -javaagent:/temp/apache-cassandra-3.11.0/jmx_prometheus_javaagent-0.10.jar=7070:/temp/apache-cassandra-3.11.0/cassandra.yml"
