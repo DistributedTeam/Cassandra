@@ -139,5 +139,13 @@ CREATE MATERIALIZED VIEW customer_balance
     c_balance IS NOT NULL and c_id IS NOT NULL and
     c_first IS NOT NULL and c_middle IS NOT NULL and
     c_last IS NOT NULL
-  PRIMARY KEY ((c_w_id, c_d_id), c_balance, c_id)
+  PRIMARY KEY ((c_w_id, c_d_id), c_balance, c_id);
 
+ALTER TABLE warehouse_district WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  };
+
+ALTER TABLE stock_item WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  };
+
+ALTER TABLE customer WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  }
