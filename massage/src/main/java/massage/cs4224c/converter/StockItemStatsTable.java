@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StockItemTable extends AbstractConverter {
+public class StockItemStatsTable extends AbstractConverter {
     private static final int S_W_ID = 0;
     private static final int S_I_ID = 1;
     private static final int S_QUANTITY = 2;
@@ -39,7 +39,7 @@ public class StockItemTable extends AbstractConverter {
     private static final int I_DATA = 4;
 
     public static void main(String[] args) {
-        AbstractConverter stockItem = new StockItemTable();
+        AbstractConverter stockItem = new StockItemStatsTable();
         stockItem.run();
     }
 
@@ -50,37 +50,19 @@ public class StockItemTable extends AbstractConverter {
         Reader stockReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "stock.csv").toFile());
         Iterable<CSVRecord> stockRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(stockReader);
 
-        Reader itemReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "item.csv").toFile());
-        Iterable<CSVRecord> itemRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(itemReader);
-        Map<String, CSVRecord> items = new HashMap<String, CSVRecord>();
-        for (CSVRecord item : itemRecords) {
-            items.put(item.get(I_ID), item);
-        }
-
-        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "stock_item.csv").toFile());
+        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "stock_item_stats.csv").toFile());
         CSVPrinter csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.INFORMIX_UNLOAD_CSV);
 
         for (CSVRecord stock : stockRecords) {
             ArrayList<String> result = new ArrayList<>();
-            CSVRecord currItem = items.get(stock.get(S_I_ID));
 
             result.add(stock.get(S_W_ID));
             result.add(stock.get(S_I_ID));
-            result.add(currItem.get(I_DATA));
-            result.add(currItem.get(I_IM_ID));
-            result.add(currItem.get(I_NAME));
-            result.add(currItem.get(I_PRICE));
-            result.add(stock.get(S_DATA));
-            result.add(stock.get(S_DIST_01));
-            result.add(stock.get(S_DIST_02));
-            result.add(stock.get(S_DIST_03));
-            result.add(stock.get(S_DIST_04));
-            result.add(stock.get(S_DIST_05));
-            result.add(stock.get(S_DIST_06));
-            result.add(stock.get(S_DIST_07));
-            result.add(stock.get(S_DIST_08));
-            result.add(stock.get(S_DIST_09));
-            result.add(stock.get(S_DIST_10));
+
+            result.add(stock.get(S_ORDER_CNT));
+            result.add(stock.get(S_QUANTITY));
+            result.add(stock.get(S_REMOTE_CNT));
+            result.add(String.valueOf(new Double(Double.parseDouble(stock.get(S_YTD)) * 100).longValue())); // DECIMAL(8, 2)
 
             csvFilePrinter.printRecord(result);
         }

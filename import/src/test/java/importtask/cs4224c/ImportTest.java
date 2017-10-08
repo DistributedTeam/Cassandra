@@ -58,10 +58,14 @@ public class ImportTest {
         logger.info("Verifying data table size in DB");
 
         validateTable("customer.csv");
+        validateTable("customer_partial.csv");
+        validateTable("customer_stats.csv");
         validateTable("order_by_o_id.csv");
         validateTable("order_line_item.csv");
         validateTable("stock_item.csv");
+        validateTable("stock_item_stats.csv");
         validateTable("warehouse_district.csv");
+        validateTable("warehouse_district_stats.csv");
         validateTable("delivery_transaction.csv");
     }
 

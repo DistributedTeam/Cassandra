@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WarehouseDistrictTable extends AbstractConverter {
+public class WarehouseDistrictStatsTable extends AbstractConverter {
 
     private static final int D_W_ID = 0;
     private static final int D_ID = 1;
@@ -40,7 +40,7 @@ public class WarehouseDistrictTable extends AbstractConverter {
 
 
     public static void main(String[] args) throws Exception {
-        AbstractConverter warehouseDistrict = new WarehouseDistrictTable();
+        AbstractConverter warehouseDistrict = new WarehouseDistrictStatsTable();
         warehouseDistrict.run();
     }
 
@@ -48,17 +48,10 @@ public class WarehouseDistrictTable extends AbstractConverter {
     public void massage() throws Exception {
         ProjectConfig config = ProjectConfig.getInstance();
 
-        Reader warehouseReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "warehouse.csv").toFile());
-        Iterable<CSVRecord> warehouseRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(warehouseReader);
-        Map<String, CSVRecord> warehouses = new HashMap<String, CSVRecord>();
-        for (CSVRecord warehouse : warehouseRecords) {
-            warehouses.put(warehouse.get(W_ID), warehouse);
-        }
-
         Reader districtReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "district.csv").toFile());
         Iterable<CSVRecord> districtRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(districtReader);
 
-        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "warehouse_district.csv").toFile());
+        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "warehouse_district_stats.csv").toFile());
         CSVPrinter csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.INFORMIX_UNLOAD_CSV);
 
         for (CSVRecord district : districtRecords) {
@@ -66,21 +59,8 @@ public class WarehouseDistrictTable extends AbstractConverter {
             result.add(district.get(D_W_ID));
             result.add(district.get(D_ID));
 
-            Address districtAddress = new Address(district.get(D_STREET_1), district.get(D_STREET_2),
-                    district.get(D_CITY), district.get(D_STATE), district.get(D_ZIP));
-            result.add(districtAddress.toString());
-
-            result.add(district.get(D_NAME));
-            result.add(district.get(D_TAX));
-
-            CSVRecord currWarehouse = warehouses.get(result.get(D_W_ID));
-
-            Address currWarehouseAddress = new Address(currWarehouse.get(W_STREET_1), currWarehouse.get(W_STREET_2),
-                    currWarehouse.get(W_CITY), currWarehouse.get(W_STATE), currWarehouse.get(W_ZIP));
-            result.add(currWarehouseAddress.toString());
-
-            result.add(currWarehouse.get(W_NAME));
-            result.add(currWarehouse.get(W_TAX));
+            result.add(district.get(D_NEXT_O_ID));
+            result.add(String.valueOf(new Double(Double.parseDouble(district.get(D_YTD)) * 100).longValue())); // DECIMAL(12, 2)
 
             csvFilePrinter.printRecord(result);
         }

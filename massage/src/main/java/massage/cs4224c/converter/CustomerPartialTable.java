@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class CustomerTable extends AbstractConverter {
+public class CustomerPartialTable extends AbstractConverter {
 
     private static final int C_W_ID = 0;
     private static final int C_D_ID = 1;
@@ -48,7 +48,7 @@ public class CustomerTable extends AbstractConverter {
     private static final int O_C_ID = 3;
 
     public static void main(String[] args) {
-        AbstractConverter customer = new CustomerTable();
+        AbstractConverter customer = new CustomerPartialTable();
         customer.run();
     }
 
@@ -59,7 +59,23 @@ public class CustomerTable extends AbstractConverter {
         Reader customerReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "customer.csv").toFile());
         Iterable<CSVRecord> customerRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(customerReader);
 
-        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "customer.csv").toFile());
+        Reader orderReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "order.csv").toFile());
+        Iterable<CSVRecord> orderRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(orderReader);
+
+        // pre-process to get customer's last order
+        Map<Triple<String, String, String>, String> customerLatestOrder = new HashMap<Triple<String, String, String>, String>();
+        for (CSVRecord order : orderRecords) {
+            Triple<String, String, String> identifier = new ImmutableTriple<>(order.get(O_W_ID), order.get(O_D_ID), order.get(O_C_ID));
+            if (!customerLatestOrder.containsKey(identifier)) {
+                customerLatestOrder.put(identifier, order.get(O_ID));
+            }
+            String O_C_ID = customerLatestOrder.get(identifier);
+            if (O_C_ID.compareTo(order.get(O_ID)) < 0) { // use bigger order id
+                customerLatestOrder.put(identifier, order.get(O_ID));
+            }
+        }
+
+        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "customer_partial.csv").toFile());
         CSVPrinter csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.INFORMIX_UNLOAD_CSV);
 
         for (CSVRecord customer : customerRecords) {
@@ -68,17 +84,15 @@ public class CustomerTable extends AbstractConverter {
             result.add(customer.get(C_W_ID));
             result.add(customer.get(C_D_ID));
             result.add(customer.get(C_ID));
-            result.add(new Address(customer.get(C_STREET_1), customer.get(C_STREET_2), customer.get(C_CITY), customer.get(C_STATE), customer.get(C_ZIP)).toString());
-            result.add(customer.get(C_CREDIT));
-            result.add(customer.get(C_CREDIT_LIM));
-            result.add(customer.get(C_DATA));
-            result.add(customer.get(C_DISCOUNT));
+
+            result.add(customer.get(C_BALANCE));
             result.add(customer.get(C_FIRST));
             result.add(customer.get(C_LAST));
 
+            Triple<String, String, String> identifier = new ImmutableTriple<>(customer.get(C_W_ID), customer.get(C_D_ID), customer.get(C_ID));
+            result.add(customerLatestOrder.getOrDefault(identifier, ""));
+
             result.add(customer.get(C_MIDDLE));
-            result.add(customer.get(C_PHONE));
-            result.add(TimeUtility.parse(customer.get(C_SINCE)).toString());
 
             csvFilePrinter.printRecord(result);
         }

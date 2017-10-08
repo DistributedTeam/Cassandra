@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class CustomerTable extends AbstractConverter {
+public class CustomerStatsTable extends AbstractConverter {
 
     private static final int C_W_ID = 0;
     private static final int C_D_ID = 1;
@@ -48,7 +48,7 @@ public class CustomerTable extends AbstractConverter {
     private static final int O_C_ID = 3;
 
     public static void main(String[] args) {
-        AbstractConverter customer = new CustomerTable();
+        AbstractConverter customer = new CustomerStatsTable();
         customer.run();
     }
 
@@ -59,7 +59,7 @@ public class CustomerTable extends AbstractConverter {
         Reader customerReader = new FileReader(Paths.get(config.getProjectRoot(), config.getDataSourceFolder(), "data-files", "customer.csv").toFile());
         Iterable<CSVRecord> customerRecords = CSVFormat.INFORMIX_UNLOAD_CSV.parse(customerReader);
 
-        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "customer.csv").toFile());
+        FileWriter fileWriter = new FileWriter(Paths.get(config.getProjectRoot(), config.getDataDestFolder(), "customer_stats.csv").toFile());
         CSVPrinter csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.INFORMIX_UNLOAD_CSV);
 
         for (CSVRecord customer : customerRecords) {
@@ -68,17 +68,11 @@ public class CustomerTable extends AbstractConverter {
             result.add(customer.get(C_W_ID));
             result.add(customer.get(C_D_ID));
             result.add(customer.get(C_ID));
-            result.add(new Address(customer.get(C_STREET_1), customer.get(C_STREET_2), customer.get(C_CITY), customer.get(C_STATE), customer.get(C_ZIP)).toString());
-            result.add(customer.get(C_CREDIT));
-            result.add(customer.get(C_CREDIT_LIM));
-            result.add(customer.get(C_DATA));
-            result.add(customer.get(C_DISCOUNT));
-            result.add(customer.get(C_FIRST));
-            result.add(customer.get(C_LAST));
 
-            result.add(customer.get(C_MIDDLE));
-            result.add(customer.get(C_PHONE));
-            result.add(TimeUtility.parse(customer.get(C_SINCE)).toString());
+            result.add(String.valueOf(new Double(Double.parseDouble(customer.get(C_BALANCE)) * 100).longValue())); // DECIMAL(12, 2)
+            result.add(customer.get(C_DELIVERY_CNT));
+            result.add(customer.get(C_PAYMENT_CNT));
+            result.add(String.valueOf(new Double(Double.parseDouble(customer.get(C_YTD_PAYMENT)) * 10000).longValue())); // DECIMAL(12, 4)
 
             csvFilePrinter.printRecord(result);
         }
