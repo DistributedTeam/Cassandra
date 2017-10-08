@@ -48,11 +48,12 @@ public class PaymentTransaction extends AbstractTransaction {
     @Override
     public void executeFlow() {
         List<Object> args = Lists.newArrayList(data.getC_W_ID(), data.getC_D_ID(), data.getC_ID());
-        Row balanceRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_BALANCE_PAYMENT, args);
+        Row balanceRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_BALANCE, args);
         double C_BALANCE = (balanceRow.getLong(INDEX_C_BALANCE) - (long)(data.getPAYMENT() * 100)) / 100.0; // DECIMAL(12,2)
         logger.info("Update payment for customer and warehouse_district.");
         QueryExecutor.getInstance().execute(PStatement.UPDATE_BALANCE_PAYMENT, Lists.newArrayList(-(long)(data.getPAYMENT() * 100), (long)(data.getPAYMENT() * 10000), 1L,
                 data.getC_W_ID(), data.getC_D_ID(), data.getC_ID())); // DECIMAL(12,2) DECIMAL(12,4)
+        QueryExecutor.getInstance().execute(PStatement.UPDATE_BALANCE_PARTIAL, Lists.newArrayList(C_BALANCE, data.getC_W_ID(), data.getC_D_ID(), data.getC_ID()));
         QueryExecutor.getInstance().execute(PStatement.UPDATE_WAREHOUSE_PAYMENT, Lists.newArrayList((long)(data.getPAYMENT() * 100), data.getC_W_ID(), data.getC_D_ID()));
         // DECIMAL(12,2)
 

@@ -24,8 +24,9 @@ public enum PStatement {
     UPDATE_CUSTOMER_LAST_ORDER("UPDATE customer_partial SET c_last_order = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
 
     // Payment Transaction
-    GET_BALANCE_PAYMENT("SELECT c_balance FROM customer_stats WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_BALANCE("SELECT c_balance FROM customer_stats WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     UPDATE_BALANCE_PAYMENT("UPDATE customer_stats SET c_balance = c_balance + ?, c_ytd_payment = c_ytd_payment + ?, c_payment_cnt = c_payment_cnt + ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    UPDATE_BALANCE_PARTIAL("UPDATE customer_partial SET c_balance = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     UPDATE_WAREHOUSE_PAYMENT("UPDATE warehouse_district_stats SET d_ytd = d_ytd + ? WHERE d_w_id = ? AND d_id = ?"),
     GET_CUSTOMER_FULL("SELECT c_first, c_middle, c_last, c_address, c_phone, c_since, c_credit, c_credit_lim, c_discount FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     GET_WD_ADDRESS("SELECT w_address, d_address FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
@@ -41,7 +42,7 @@ public enum PStatement {
     UPDATE_CUSTOMER_BALANCE_AND_DELIVERY_COUNT("UPDATE customer_stats SET c_balance = c_balance + ?, c_delivery_cnt = c_delivery_cnt + ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
 
     // OrderStatus Transaction
-    GET_CUSTOMER_NAME_AND_BALANCE("SELECT c_first, c_middle, c_last, c_last_order, c_balance from customer_partial WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_CUSTOMER_NAME_AND_LAST_ORDER("SELECT c_first, c_middle, c_last, c_last_order from customer_partial WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     GET_CUSTOMER_LAST_ORDER("SELECT o_entry_d, o_carrier_id FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?"),
     GET_ORDER_LINES_FOR_LAST_ORDER("SELECT ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
 

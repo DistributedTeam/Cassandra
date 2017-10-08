@@ -42,7 +42,7 @@ public class StockLevelTransaction extends AbstractTransaction {
         if (warehouseDistrictRow == null) {
             throw new RuntimeException("Empty district in database.");
         }
-        int next_o_id = warehouseDistrictRow.getInt(INDEX_NEXT_O_ID);
+        int next_o_id = (int)warehouseDistrictRow.getLong(INDEX_NEXT_O_ID);
 
         for (int i = next_o_id - data.getL(); i < next_o_id; i++) {
 
@@ -54,13 +54,13 @@ public class StockLevelTransaction extends AbstractTransaction {
 
             ResultSet orderLineItems = QueryExecutor.getInstance().execute(PStatement.GET_LAST_L_ORDER_ITEMS, Lists.newArrayList(data.getW_ID(), data.getD_ID(), i));
             if (!orderLineItems.iterator().hasNext()) {
-                logger.warn("NEXT_O_ID is not consecutive as orderLine cannot be find in database [{}, {}, {}].", data.getW_ID(), data.getD_ID(), i);
+                logger.warn("OrderLine cannot be find in database [{}, {}, {}]. This might due to interleave execution.", data.getW_ID(), data.getD_ID(), i);
                 continue;
             }
             for (Row orderLineItem : orderLineItems) {
                 int i_id = orderLineItem.getInt(INDEX_I_ID);
                 Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
-                int quantity = stockItemRow.getInt(INDEX_QUANTITY);
+                int quantity = (int)stockItemRow.getLong(INDEX_QUANTITY);
                 if (quantity < data.getT() && !data.getLowStockItems().contains(i_id)) {
                     // without duplicates
                     data.getLowStockItems().add(i_id);
