@@ -1,4 +1,4 @@
-1. (C_W_ID: 1, C_D_ID: 1, C_ID: 105), Name: (khzxfxlegfqln, OE, OUGHTBARPRES), Address: (itfyesjfjdoeutw, fkaqmyqlzhkj, zjfqivcdfscvfovy, fkaqmyqlzhkj, 410811111), C_PHONE: 1144211277290692, C_SINCE: 2017-08-26 21:54:28.283 UTC, C_CREDIT: GC, C_CREDIT_LIM: 50000.0000, C_DISCOUNT: 0.3404, C_BALANCE: -1944.2900
+1. (C_W_ID: 1, C_D_ID: 1, C_ID: 105), Name: (khzxfxlegfqln, OE, OUGHTBARPRES), Address: (itfyesjfjdoeutw, fkaqmyqlzhkj, zjfqivcdfscvfovy, fkaqmyqlzhkj, 410811111), C_PHONE: 1144211277290692, C_SINCE: 2017-08-26 21:54:28.283 UTC, C_CREDIT: GC, C_CREDIT_LIM: 50000.00, C_DISCOUNT: 0.3404, C_BALANCE: -1944.29
 2. Warehouse: dqdxvcrastvyb, wvmgnykrxvzxkgx, spsjdgyluegqflaq, wvmgnykrxvzxkgx, 123456789
 3. District: otmdcnnoxp, wjcmbdojow, iblgzfdzwrtczlehp, wjcmbdojow, 123456789
-4. PAYMENT: 1934.2900
+4. PAYMENT: 1934.29

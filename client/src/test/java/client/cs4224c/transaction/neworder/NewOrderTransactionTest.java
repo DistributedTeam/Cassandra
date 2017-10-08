@@ -24,7 +24,7 @@ public class NewOrderTransactionTest extends BaseTransactionTest {
         logger.info("Begin to validate database for NewOrderTransaction");
 
         // validate d_next_o_id
-        ResultSet d_next_o_id = QueryExecutor.getInstance().execute("SELECT d_next_o_id FROM warehouse_district WHERE d_w_id = 7 AND d_id = 7");
+        ResultSet d_next_o_id = QueryExecutor.getInstance().execute("SELECT d_next_o_id FROM warehouse_district_stats WHERE d_w_id = 7 AND d_id = 7");
         Assert.assertEquals("Row[3002]", d_next_o_id.one().toString());
 
         // validate order
@@ -32,16 +32,16 @@ public class NewOrderTransactionTest extends BaseTransactionTest {
         Assert.assertEquals("Row[347, NULL, 3, false]", order.one().toString());
 
         // validate customer last order
-        ResultSet customerLastOrder = QueryExecutor.getInstance().execute("SELECT c_last_order FROM customer WHERE c_w_id = 7 AND c_d_id = 7 AND c_id = 347");
+        ResultSet customerLastOrder = QueryExecutor.getInstance().execute("SELECT c_last_order FROM customer_partial WHERE c_w_id = 7 AND c_d_id = 7 AND c_id = 347");
         Assert.assertEquals("Row[3001]", customerLastOrder.one().toString());
 
         // validate stock
-        ResultSet stock1 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item WHERE s_w_id = 10 AND s_i_id = 14");
-        Assert.assertEquals("Row[10, 68.0, 1, 1]", stock1.one().toString());
-        ResultSet stock2 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item WHERE s_w_id = 7 AND s_i_id = 283");
-        Assert.assertEquals("Row[107, 40.0, 1, 0]", stock2.one().toString());
-        ResultSet stock3 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item WHERE s_w_id = 12 AND s_i_id = 312");
-        Assert.assertEquals("Row[69, 10.0, 1, 1]", stock3.one().toString());
+        ResultSet stock1 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item_stats WHERE s_w_id = 10 AND s_i_id = 14");
+        Assert.assertEquals("Row[10, 6800, 1, 1]", stock1.one().toString());
+        ResultSet stock2 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item_stats WHERE s_w_id = 7 AND s_i_id = 283");
+        Assert.assertEquals("Row[107, 4000, 1, 0]", stock2.one().toString());
+        ResultSet stock3 = QueryExecutor.getInstance().execute("SELECT s_quantity, s_ytd, s_order_cnt, s_remote_cnt FROM stock_item_stats WHERE s_w_id = 12 AND s_i_id = 312");
+        Assert.assertEquals("Row[69, 1000, 1, 1]", stock3.one().toString());
 
         // validate order-lines
         ResultSet orderLines = QueryExecutor.getInstance().execute("SELECT ol_number, ol_i_id, ol_supply_w_id, ol_quantity, ol_delivery_d, ol_dist_info FROM order_line_item WHERE ol_w_id = 7 AND ol_d_id = 7 AND ol_o_id = 3001");
