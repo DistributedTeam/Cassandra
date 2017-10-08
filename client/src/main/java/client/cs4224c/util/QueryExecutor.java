@@ -66,34 +66,6 @@ public class QueryExecutor {
         return resultSet.one();
     }
 
-    public Row getAndUpdateWithRetry(PStatement getStatement, List<Object> getArgs, PStatement updateStatement, List<Object> updateArgs, Function<Row, List<Object>> updateFunc, Function<Row, Object> ifPositionFunc) {
-        Row result = null;
-        int count = 1;
-        while (true) {
-            result = executeAndGetOneRow(getStatement, getArgs);
-            if (result == null) {
-                throw new IllegalArgumentException(String.format("%s with args %s returns empty row.", getStatement, getArgs));
-            }
-            List<Object> newUpdateArgs = Lists.newArrayList();
-            newUpdateArgs.addAll(updateFunc.apply(result));
-            newUpdateArgs.addAll(updateArgs);
-            newUpdateArgs.add(ifPositionFunc.apply(result)); // if statement params
-            ResultSet resultSet = execute(updateStatement, newUpdateArgs);
-            if (resultSet.wasApplied()) {
-                break;
-            }
-            if (count >= ProjectConfig.getInstance().getMaxIfUpdateTry()) {
-                logger.error("Executing getAndUpdateWithRetry with getStatement {} ({}) updateStatement {}({}) fails. Exceed maximum retry: {}",
-                        getStatement, getArgs, updateStatement, updateArgs, count);
-                throw new RuntimeException();
-            }
-            count++;
-        }
-        return result;
-    }
-
-    // USED IN TEST ENV
-
     public ResultSet execute(String query) {
         return session.execute(query);
     }
