@@ -1,6 +1,7 @@
 package client.cs4224c.transaction.database;
 
 import client.cs4224c.parser.AbstractParser;
+import client.cs4224c.parser.DatabaseStateParser;
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.BaseTransactionTest;
 import org.junit.Test;
@@ -10,18 +11,13 @@ import java.io.IOException;
 public class DatabaseStateTransactionTest extends BaseTransactionTest {
 
     public DatabaseStateTransactionTest() {
-        super(AbstractParser.class);
+        super(DatabaseStateParser.class);
     }
-
-    @Override
-    protected AbstractTransaction executeFlowWithData(String dataFileName) throws Exception {
-        throw new UnsupportedOperationException("This transaction is just to ouput database status");
-    }
-
 
     @Test
-    public void testDatabaseState() throws IOException {
-        new DatabaseStateTransaction().executeFlow();
+    public void testDatabaseState() throws Exception {
+        this.executeFlowWithData("case1.txt");
+
         this.validateSystemOutput("expectedOutput.txt", "");
     }
 }

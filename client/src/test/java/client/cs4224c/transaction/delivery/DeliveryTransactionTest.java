@@ -18,7 +18,7 @@ public class DeliveryTransactionTest extends BaseTransactionTest{
 
     @Test
     public void test1() throws Exception {
-        this.executeFlowWithData("deliveryTransactionCase1.txt");
+        this.executeFlowWithData("case1.txt");
 
         // validate updatedMinOrderIdWithNullCarrierId
         ResultSet updatedMinOrderIdWithNullCarrierIdRow1 = QueryExecutor.getInstance().execute("SELECT dt_min_ud_o_id FROM delivery_transaction WHERE dt_w_id = 7 AND dt_d_id = 2");

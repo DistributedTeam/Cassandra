@@ -60,10 +60,6 @@ public class ExperimentClient {
         System.out.println("Total transaction execution time (seconds): " + executionTimeInSecond);
         System.out.println("Transaction throughput: " + executionTimeInSecond / numOfTransaction);
 
-        // Output DB state
-        System.out.println("\n[DATABASE STATE]");
-        new DatabaseStateTransaction().execute();
-
         QueryExecutor.getInstance().closeConnection();
     }
 }

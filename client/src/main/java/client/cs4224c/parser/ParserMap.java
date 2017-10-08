@@ -16,6 +16,7 @@ public class ParserMap {
         parserMap.put("S", StockLevelParser.class);
         parserMap.put("I", PopularItemParser.class);
         parserMap.put("T", TopBalanceParser.class);
+        parserMap.put("DATABASE", DatabaseStateParser.class);
     }
 
     public static Class<? extends AbstractParser> get(String command) {
