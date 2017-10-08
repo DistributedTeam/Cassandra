@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for i in {1..1}
+do
+  ./gradlew client:experiment -PtFile=$i.txt --no-daemon > experiment_log/$i.log &
+  PID=$!
+  echo $PID | tee experiment_log/$i.pid
+done

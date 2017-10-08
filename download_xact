@@ -1,0 +1,5 @@
+#!/bin/bash
+
+wget http://myxpweb.com/xact-files.zip
+unzip xact-files.zip
+cp -rf xact-files/* project-files/xact-files
