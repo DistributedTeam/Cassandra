@@ -1,6 +1,5 @@
 package massage.cs4224c.converter;
 
-import massage.cs4224c.userDefinedType.Address;
 import massage.cs4224c.util.ProjectConfig;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -11,8 +10,6 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WarehouseDistrictStatsTable extends AbstractConverter {
 

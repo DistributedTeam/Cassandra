@@ -6,16 +6,12 @@ import massage.cs4224c.util.TimeUtility;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class CustomerTable extends AbstractConverter {

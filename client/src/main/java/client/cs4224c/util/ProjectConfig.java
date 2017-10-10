@@ -16,7 +16,7 @@ public class ProjectConfig {
 
     private static final String CASSANDRA_IP = "cassandra.ip";
     private static final String CASSANDRA_KEYSPACE = "cassandra.keyspace";
-    private static final String MAX_IF_UPDATE_TRY = "max.if.update.try";
+    private static final String CASSANDRA_CLIENT_READ_TIMEOUT = "cassandra.client.read.timeout";
     private static final String TRANSACTION_FILE_FOLDER = "transaction.file.folder";
 
     private static ProjectConfig instance;
@@ -73,11 +73,11 @@ public class ProjectConfig {
         return configuration.getString(CASSANDRA_KEYSPACE);
     }
 
-    public int getMaxIfUpdateTry() {
-        return configuration.getInt(MAX_IF_UPDATE_TRY);
-    }
-
     public String getTransactionFileFolder() {
         return configuration.getString(TRANSACTION_FILE_FOLDER);
+    }
+
+    public int getCassandraClientReadTimeout() {
+        return configuration.getInt(CASSANDRA_CLIENT_READ_TIMEOUT);
     }
 }

@@ -2,7 +2,6 @@ package client.cs4224c.transaction.delivery;
 
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.transaction.delivery.data.DeliveryTransactionData;
-import client.cs4224c.util.Constant;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
 import com.datastax.driver.core.ResultSet;
@@ -11,9 +10,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 public class DeliveryTransaction extends AbstractTransaction{
 

@@ -10,8 +10,6 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class StockItemStatsTable extends AbstractConverter {
     private static final int S_W_ID = 0;

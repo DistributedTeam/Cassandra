@@ -92,6 +92,18 @@ CREATE TABLE stock_item_stats (
     PRIMARY KEY ((s_w_id, s_i_id))
 );
 
+CREATE TABLE customer_partial (
+    c_w_id smallint,
+    c_d_id smallint,
+    c_id int,
+    c_first text,
+    c_middle text,
+    c_last text,
+    c_balance double,
+    c_last_order int,
+    PRIMARY KEY ((c_w_id, c_d_id), c_id)
+);
+
 CREATE TABLE customer (
     c_w_id smallint,
     c_d_id smallint,
@@ -117,18 +129,6 @@ CREATE TABLE customer_stats (
     c_delivery_cnt counter,
     c_payment_cnt counter,
     c_ytd_payment counter,
-    PRIMARY KEY ((c_w_id, c_d_id), c_id)
-);
-
-CREATE TABLE customer_partial (
-    c_w_id smallint,
-    c_d_id smallint,
-    c_id int,
-    c_first text,
-    c_middle text,
-    c_last text,
-    c_balance double,
-    c_last_order int,
     PRIMARY KEY ((c_w_id, c_d_id), c_id)
 );
 

@@ -1,15 +1,14 @@
 package client.cs4224c.util;
 
+import client.cs4224c.policy.ExperimentLoadBalancePolicy;
 import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.RoundRobinPolicy;
-import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class QueryExecutor {
 
@@ -35,10 +34,16 @@ public class QueryExecutor {
     }
 
     public void reload() {
-        cluster = Cluster.builder()
+        Cluster.Builder builder = Cluster.builder()
                 .addContactPoint(ProjectConfig.getInstance().getCassandraIp())
-                .withLoadBalancingPolicy(new RoundRobinPolicy())
-                .build();
+                .withCompression(ProtocolOptions.Compression.LZ4)
+                .withSocketOptions(
+                    new SocketOptions()
+                        .setReadTimeoutMillis(ProjectConfig.getInstance().getCassandraClientReadTimeout()));
+        if (StringUtils.isNotEmpty(System.getProperty(Constant.PROPERTY_EXPERIMENT_HOST))) {
+            builder.withLoadBalancingPolicy(new ExperimentLoadBalancePolicy());
+        }
+        cluster = builder.build();
         session = cluster.connect(ProjectConfig.getInstance().getCassandraKeyspace());
         initialize();
     }

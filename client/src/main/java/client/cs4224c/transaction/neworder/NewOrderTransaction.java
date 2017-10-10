@@ -6,14 +6,11 @@ import client.cs4224c.transaction.neworder.data.NewOrderTransactionOrderLine;
 import client.cs4224c.util.PStatement;
 import client.cs4224c.util.QueryExecutor;
 import client.cs4224c.util.TimeUtility;
-import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.datastax.driver.core.exceptions.CodecNotFoundException;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

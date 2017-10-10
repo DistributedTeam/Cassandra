@@ -17,8 +17,8 @@ task run(type: JavaExec) {
 }
 
 task experiment(type: JavaExec) {
-    if (project.hasProperty('tFile')) {
-        args(tFile)
+    if (project.hasProperty('tFile') && project.hasProperty('tHost')) {
+        args(tFile, tHost)
     }
     main = "client.cs4224c.ExperimentClient"
     classpath = sourceSets.main.runtimeClasspath
@@ -29,6 +29,7 @@ dependencies {
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.3.0'
     compile group: 'org.apache.commons', name: 'commons-configuration2', version: '2.1'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.2'
+    compile group: 'net.jpountz.lz4', name: 'lz4', version: '1.3.0'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '3.3'

@@ -3,14 +3,12 @@ package client.cs4224c;
 import client.cs4224c.parser.AbstractParser;
 import client.cs4224c.parser.ParserMap;
 import client.cs4224c.transaction.AbstractTransaction;
-import client.cs4224c.transaction.database.DatabaseStateTransaction;
 import client.cs4224c.util.Constant;
 import client.cs4224c.util.ProjectConfig;
 import client.cs4224c.util.QueryExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -22,12 +20,16 @@ public class ExperimentClient {
 
     public static void main(String[] args) throws Exception {
 
-        if (args.length < 1) {
-            logger.warn("Expect input file name");
+        if (args.length < 2) {
+            logger.warn("Expect input file name and host name");
             System.exit(1);
         }
 
-        logger.info("Transaction file name is " + args[0]);
+        logger.info("Requested host is {}", args[1]);
+
+        System.setProperty(Constant.PROPERTY_EXPERIMENT_HOST, args[1]);
+
+        logger.info("Transaction file name is {}", args[0]);
 
         Scanner sc = new Scanner(Paths.get(ProjectConfig.getInstance().getProjectRoot(), ProjectConfig.getInstance().getTransactionFileFolder(),
                 args[0]));

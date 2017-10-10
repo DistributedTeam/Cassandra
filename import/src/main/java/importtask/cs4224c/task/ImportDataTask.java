@@ -42,6 +42,7 @@ public class ImportDataTask implements Runnable {
 
         String[] cmd = new String[] {
                 getCqlShCmd(),
+                "--request-timeout=60",
                 "-k",
                 config.getCassandraKeyspace(),
                 "-e",
