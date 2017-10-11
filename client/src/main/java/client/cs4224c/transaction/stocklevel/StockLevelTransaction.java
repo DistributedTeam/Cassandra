@@ -59,9 +59,14 @@ public class StockLevelTransaction extends AbstractTransaction {
             }
             for (Row orderLineItem : orderLineItems) {
                 int i_id = orderLineItem.getInt(INDEX_I_ID);
+                if (data.getLowStockItems().contains(i_id)) {
+                    // no need to query as it is already there.
+                    // in case that someone minus stock in between this, we cannot do anything about it.
+                    continue;
+                }
                 Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
                 int quantity = (int)stockItemRow.getLong(INDEX_QUANTITY);
-                if (quantity < data.getT() && !data.getLowStockItems().contains(i_id)) {
+                if (quantity < data.getT()) {
                     // without duplicates
                     data.getLowStockItems().add(i_id);
                 }
