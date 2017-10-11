@@ -57,8 +57,11 @@ public enum PStatement {
     GET_LAST_L_ORDER_LINES("SELECT ol_i_id, ol_quantity, i_name FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
 
     // Top Balance Transaction
-    GET_W_ID_D_ID_W_NAME_D_NAME("SELECT d_w_id, d_id, w_name, d_name FROM warehouse_district"),
-    GET_TOP_BALANCE_CUSTOMER("SELECT c_first, c_middle, c_last, c_balance FROM customer_balance WHERE c_w_id = ? AND c_d_id = ? ORDER BY c_balance DESC LIMIT 10");
+    GET_W_ID_D_ID("SELECT d_w_id, d_id FROM warehouse_district"),
+    GET_W_D_NAME("SELECT w_name, d_name FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
+    GET_W_NAME("SELECT w_name FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
+    GET_D_NAME("SELECT d_name FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
+    GET_TOP_BALANCE_CUSTOMER("SELECT c_balance, c_id FROM customer_balance WHERE c_w_id = ? AND c_d_id = ? ORDER BY c_balance DESC LIMIT 10");
     
     private String cql;
 
