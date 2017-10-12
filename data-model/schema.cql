@@ -35,6 +35,9 @@ CREATE TABLE order_by_o_id (
     o_carrier_id int,
     o_entry_d timestamp,
     o_ol_cnt int,
+    c_first text,
+    c_middle text,
+    c_last text,
     PRIMARY KEY ((o_w_id, o_d_id, o_id))
 );
 

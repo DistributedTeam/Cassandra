@@ -6,7 +6,7 @@ public enum PStatement {
     GET_D_NEXT_O_ID("SELECT d_next_o_id FROM warehouse_district_stats WHERE d_w_id = ? AND d_id = ?"),
     GET_TAX("SELECT w_tax, d_tax FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
     UPDATE_D_NEXT_O_ID("UPDATE warehouse_district_stats SET d_next_o_id = d_next_o_id + ? WHERE d_w_id = ? AND d_id = ?"),
-    INSERT_ORDER("INSERT INTO order_by_o_id (o_id, o_d_id, o_w_id, o_c_id, o_entry_d, o_ol_cnt, o_all_local) VALUES (?, ?, ?, ?, ?, ?, ?)"),
+    INSERT_ORDER("INSERT INTO order_by_o_id (o_id, o_d_id, o_w_id, o_c_id, o_entry_d, o_ol_cnt, o_all_local, c_first, c_middle, c_last) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"),
     GET_STOCK_DIST_1("SELECT i_price, i_name, s_dist_01 FROM stock_item WHERE s_w_id = ? AND s_i_id = ?"),
     GET_STOCK_DIST_2("SELECT i_price, i_name, s_dist_02 FROM stock_item WHERE s_w_id = ? AND s_i_id = ?"),
     GET_STOCK_DIST_3("SELECT i_price, i_name, s_dist_03 FROM stock_item WHERE s_w_id = ? AND s_i_id = ?"),
@@ -20,7 +20,7 @@ public enum PStatement {
     GET_STOCK("SELECT s_quantity FROM stock_item_stats WHERE s_w_id = ? AND s_i_id = ?"),
     UPDATE_STOCK("UPDATE stock_item_stats SET s_quantity = s_quantity + ?, s_ytd = s_ytd + ?, s_order_cnt = s_order_cnt + ?, s_remote_cnt = s_remote_cnt + ? WHERE s_w_id = ? AND s_i_id = ?"),
     INSERT_ORDER_LINE("INSERT INTO order_line_item (ol_w_id, ol_d_id, ol_o_id, ol_number, ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_dist_info, i_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"),
-    GET_CUSTOMER("SELECT c_discount, c_last, c_credit from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_CUSTOMER("SELECT c_discount, c_first, c_middle, c_last, c_credit from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     UPDATE_CUSTOMER_LAST_ORDER("UPDATE customer_partial SET c_last_order = ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
 
     // Payment Transaction
@@ -52,8 +52,7 @@ public enum PStatement {
     GET_STOCK_QUANTITY("SELECT s_quantity FROM stock_item_stats WHERE s_w_id = ? AND s_i_id = ?"),
 
     // PopularItem Transaction
-    GET_LAST_L_ORDERS("SELECT o_entry_d, o_c_id FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?"),
-    GET_CUSTOMER_NAME("SELECT c_first, c_middle, c_last from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_LAST_L_ORDERS("SELECT o_entry_d, c_first, c_middle, c_last FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?"),
     GET_LAST_L_ORDER_LINES("SELECT ol_i_id, ol_quantity, i_name FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
 
     // Top Balance Transaction
@@ -61,6 +60,7 @@ public enum PStatement {
     GET_W_D_NAME("SELECT w_name, d_name FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
     GET_W_NAME("SELECT w_name FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
     GET_D_NAME("SELECT d_name FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
+    GET_CUSTOMER_NAME("SELECT c_first, c_middle, c_last from customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     GET_TOP_BALANCE_CUSTOMER("SELECT c_balance, c_id FROM customer_balance WHERE c_w_id = ? AND c_d_id = ? ORDER BY c_balance DESC LIMIT 10");
     
     private String cql;

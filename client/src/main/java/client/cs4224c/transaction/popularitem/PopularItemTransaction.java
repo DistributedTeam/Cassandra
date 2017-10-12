@@ -34,11 +34,9 @@ public class PopularItemTransaction extends AbstractTransaction {
     private static int INDEX_NEXT_O_ID = 0;
 
     private static int INDEX_ENTRY_DATE = 0;
-    private static int INDEX_C_ID = 1;
-
-    private static int INDEX_FIRST_NAME = 0;
-    private static int INDEX_MIDDLE_NAME = 1;
-    private static int INDEX_LAST_NAME = 2;
+    private static int INDEX_FIRST_NAME = 1;
+    private static int INDEX_MIDDLE_NAME = 2;
+    private static int INDEX_LAST_NAME = 3;
 
     private static int INDEX_I_ID = 0;
     private static int INDEX_QUANTITY = 1;
@@ -69,18 +67,12 @@ public class PopularItemTransaction extends AbstractTransaction {
                 continue;
             }
 
-            int c_id = orderRow.getInt(INDEX_C_ID);
-            Row customerRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_NAME, Lists.newArrayList(data.getW_ID(), data.getD_ID(), c_id));
-            if (customerRow == null) {
-                throw new RuntimeException("Empty costumer in database.");
-            }
-
             OrderData orderData = new OrderData();
             orderData.setO_ID(i);
             orderData.setO_ENTRY_DATE(orderRow.getTimestamp(INDEX_ENTRY_DATE));
-            orderData.setC_FIRST(customerRow.getString(INDEX_FIRST_NAME));
-            orderData.setC_MIDDLE(customerRow.getString(INDEX_MIDDLE_NAME));
-            orderData.setC_LAST(customerRow.getString(INDEX_LAST_NAME));
+            orderData.setC_FIRST(orderRow.getString(INDEX_FIRST_NAME));
+            orderData.setC_MIDDLE(orderRow.getString(INDEX_MIDDLE_NAME));
+            orderData.setC_LAST(orderRow.getString(INDEX_LAST_NAME));
 
             ResultSet orderLines = QueryExecutor.getInstance().execute(PStatement.GET_LAST_L_ORDER_LINES, Lists.newArrayList(data.getW_ID(), data.getD_ID(), i));
             if (orderLines == null) {

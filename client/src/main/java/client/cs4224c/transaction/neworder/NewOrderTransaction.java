@@ -44,8 +44,10 @@ public class NewOrderTransaction extends AbstractTransaction {
     private static int INDEX_STOCK_DIST_INFO = 2;
 
     private static int INDEX_CUSTOMER_DISCOUNT = 0;
-    private static int INDEX_CUSTOMER_LAST = 1;
-    private static int INDEX_CUSTOMER_CREDIT = 2;
+    private static int INDEX_CUSTOMER_FIRST = 1;
+    private static int INDEX_CUSTOMER_MIDDLE = 2;
+    private static int INDEX_CUSTOMER_LAST = 3;
+    private static int INDEX_CUSTOMER_CREDIT = 4;
 
     @Override
     public void executeFlow() {
@@ -59,10 +61,18 @@ public class NewOrderTransaction extends AbstractTransaction {
         data.setD_TAX(warehouseDistrictRow.getDouble(INDEX_D_TAX));
         logger.info("Get the D_NEXT_O_ID and update it with retry already {}", next_o_id);
 
+        Row customerRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER, Lists.newArrayList(data.getW_ID(), data.getD_ID(), data.getC_ID()));
+        data.setC_DISCOUNT(customerRow.getDouble(INDEX_CUSTOMER_DISCOUNT));
+        data.setC_CREDIT(customerRow.getString(INDEX_CUSTOMER_CREDIT));
+        data.setC_FIRST(customerRow.getString(INDEX_CUSTOMER_FIRST));
+        data.setC_MIDDLE(customerRow.getString(INDEX_CUSTOMER_MIDDLE));
+        data.setC_LAST(customerRow.getString(INDEX_CUSTOMER_LAST));
+
         logger.info("Create new order");
         data.setO_ENTRY_D(new Date());
         QueryExecutor.getInstance().execute(PStatement.INSERT_ORDER,
-                Lists.newArrayList(next_o_id, data.getD_ID(), data.getW_ID(), data.getC_ID(), data.getO_ENTRY_D(), data.getOrderLines().size(), data.isAllLocal()));
+                Lists.newArrayList(next_o_id, data.getD_ID(), data.getW_ID(), data.getC_ID(), data.getO_ENTRY_D(), data.getOrderLines().size(), data.isAllLocal(),
+                        data.getC_FIRST(), data.getC_MIDDLE(), data.getC_LAST()));
 
         logger.info("Update customer last order");
         QueryExecutor.getInstance().execute(PStatement.UPDATE_CUSTOMER_LAST_ORDER,
@@ -105,11 +115,6 @@ public class NewOrderTransaction extends AbstractTransaction {
             QueryExecutor.getInstance().execute(PStatement.INSERT_ORDER_LINE, Lists.newArrayList(data.getW_ID(), data.getD_ID(), next_o_id, i + 1, orderLine.getOL_I_ID(),
                     orderLine.getOL_SUPPLY_W_ID(), orderLine.getOL_QUANTITY(), itemAmount, distInfo, orderLine.getI_NAME()));
         }
-
-        Row customerRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER, Lists.newArrayList(data.getW_ID(), data.getD_ID(), data.getC_ID()));
-        data.setC_DISCOUNT(customerRow.getDouble(INDEX_CUSTOMER_DISCOUNT));
-        data.setC_CREDIT(customerRow.getString(INDEX_CUSTOMER_CREDIT));
-        data.setC_LAST(customerRow.getString(INDEX_CUSTOMER_LAST));
 
         total_amount *= (1 + data.getD_TAX() + data.getW_TAX()) * (1 - data.getC_DISCOUNT());
 

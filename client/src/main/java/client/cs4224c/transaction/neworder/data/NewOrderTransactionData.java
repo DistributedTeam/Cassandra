@@ -19,6 +19,8 @@ public class NewOrderTransactionData {
 
     private double C_DISCOUNT;
     private String C_CREDIT;
+    private String C_FIRST;
+    private String C_MIDDLE;
     private String C_LAST;
 
     private Date O_ENTRY_D;
@@ -102,6 +104,22 @@ public class NewOrderTransactionData {
 
     public void setC_CREDIT(String c_CREDIT) {
         C_CREDIT = c_CREDIT;
+    }
+
+    public String getC_FIRST() {
+        return C_FIRST;
+    }
+
+    public void setC_FIRST(String c_FIRST) {
+        C_FIRST = c_FIRST;
+    }
+
+    public String getC_MIDDLE() {
+        return C_MIDDLE;
+    }
+
+    public void setC_MIDDLE(String c_MIDDLE) {
+        C_MIDDLE = c_MIDDLE;
     }
 
     public String getC_LAST() {
