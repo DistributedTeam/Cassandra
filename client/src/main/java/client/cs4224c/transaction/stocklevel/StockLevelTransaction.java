@@ -24,11 +24,6 @@ public class StockLevelTransaction extends AbstractTransaction {
         this.data = data;
     }
 
-    private static int INDEX_W_ID = 0;
-    private static int INDEX_D_ID = 1;
-    private static int INDEX_T = 2;
-    private static int INDEX_L = 3;
-
     private static int INDEX_NEXT_O_ID = 0;
 
     private static int INDEX_I_ID = 0;
@@ -59,15 +54,18 @@ public class StockLevelTransaction extends AbstractTransaction {
             }
             for (Row orderLineItem : orderLineItems) {
                 int i_id = orderLineItem.getInt(INDEX_I_ID);
-                if (data.getLowStockItems().contains(i_id)) {
+
+                if (data.getOrderlineItems().contains(i_id)) {
+                    // without duplicates
                     // no need to query as it is already there.
                     // in case that someone minus stock in between this, we cannot do anything about it.
                     continue;
                 }
+                data.getOrderlineItems().add(i_id);
+
                 Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
                 int quantity = (int)stockItemRow.getLong(INDEX_QUANTITY);
                 if (quantity < data.getT()) {
-                    // without duplicates
                     data.getLowStockItems().add(i_id);
                 }
             }
