@@ -47,9 +47,16 @@ public class ExperimentLoadBalancePolicy implements LoadBalancingPolicy {
     @Override
     public Iterator<Host> newQueryPlan(String loggedKeyspace, Statement statement) {
         return new AbstractIterator<Host>() {
+
+            private boolean hasReturned;
+
             @Override
             protected Host computeNext() {
-                return hostMap.get(hostName);
+                if (!hasReturned) {
+                    hasReturned = true;
+                    return hostMap.get(hostName);
+                }
+                return endOfData();
             }
         };
     }
