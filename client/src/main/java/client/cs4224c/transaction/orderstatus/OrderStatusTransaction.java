@@ -39,8 +39,7 @@ public class OrderStatusTransaction extends AbstractTransaction {
     private static int INDEX_CUSTOMER_MIDDLE_NAME = 1;
     private static int INDEX_CUSTOMER_LAST_NAME = 2;
     private static int INDEX_CUSTOMER_LAST_ORDER_ID = 3;
-
-    private static int INDEX_CUSTOMER_STATS_BALANCE = 0;
+    private static int INDEX_CUSTOMER_BALANCE = 4;
 
     @Override
     public void executeFlow() {
@@ -51,12 +50,11 @@ public class OrderStatusTransaction extends AbstractTransaction {
             return;
         }
 
-        Row balanceRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_BALANCE, Lists.newArrayList(data.getC_W_ID(), data.getC_D_ID(), data.getC_ID()));
         System.out.println(String.format("1. Customer(C_FIRST: %s, C_MIDDLE: %s, C_LAST: %s), C_BALANCE: %.2f",
                 customerRow.getString(INDEX_CUSTOMER_FIRSR_NAME),
                 customerRow.getString(INDEX_CUSTOMER_MIDDLE_NAME),
                 customerRow.getString(INDEX_CUSTOMER_LAST_NAME),
-                balanceRow.getLong(INDEX_CUSTOMER_STATS_BALANCE) / 100.0)); // DECIMAL(12,2)
+                customerRow.getLong(INDEX_CUSTOMER_BALANCE) / 100.0)); // DECIMAL(12,2)
 
         Row lastOrderRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_LAST_ORDER, Lists.newArrayList(data.getC_W_ID(), data.getC_D_ID(), customerRow.getInt(INDEX_CUSTOMER_LAST_ORDER_ID)));
         System.out.println(String.format("2. Last order : O_ID: %s, O_ENTRY_D: %s, O_CARRIER_ID: %s",
