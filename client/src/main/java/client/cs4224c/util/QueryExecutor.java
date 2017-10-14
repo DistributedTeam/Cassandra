@@ -51,7 +51,8 @@ public class QueryExecutor {
     private void initialize() {
         logger.info("Send all prepared statements to server now.");
         for (PStatement statement : PStatement.values()) {
-            statementMap.put(statement, session.prepare(statement.getCql()));
+            statementMap.put(statement,
+                    session.prepare(statement.getCql()).setConsistencyLevel(ConsistencyLevel.QUORUM));
         }
     }
 
