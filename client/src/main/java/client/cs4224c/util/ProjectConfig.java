@@ -18,6 +18,7 @@ public class ProjectConfig {
     private static final String CASSANDRA_KEYSPACE = "cassandra.keyspace";
     private static final String CASSANDRA_CLIENT_READ_TIMEOUT = "cassandra.client.read.timeout";
     private static final String TRANSACTION_FILE_FOLDER = "transaction.file.folder";
+    private static final String QUERY_CONSISTENCY_LEVEL = "query.consistency.level";
 
     private static ProjectConfig instance;
 
@@ -79,5 +80,9 @@ public class ProjectConfig {
 
     public int getCassandraClientReadTimeout() {
         return configuration.getInt(CASSANDRA_CLIENT_READ_TIMEOUT);
+    }
+
+    public String getQueryConsistencyLevel() {
+        return configuration.getString(QUERY_CONSISTENCY_LEVEL);
     }
 }
