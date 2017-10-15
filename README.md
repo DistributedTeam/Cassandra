@@ -25,7 +25,6 @@ In the following sections, this script is referred to generally as `gradlew`.
 
 For Windows users, ensure that paths to Java 8 and Python 2.7 are correctly added to `System Properties` > `Advanced` > `Environment Variables` > `PATH`.
 
- 
 ### Prepare and Denormalize Data
 Download zipped data files from [http://www.comp.nus.edu.sg/~cs4224/cs4224-project-files.zip](http://www.comp.nus.edu.sg/~cs4224/cs4224-project-files.zip).
 
@@ -40,13 +39,22 @@ Make sure `gradlew massage:run` command is executed successfully before this ste
 Run Cassandra on chosen IP address. Refer to [Apache Cassandra Documentation v4.0](http://cassandra.apache.org/doc/latest/) for more details.
 The `gradlew` script assumes by default that Cassandra runs on IP address `127.0.0.1`. 
 
-To change default IP address, change `cassandra.ip` in both files `import/project.properties` and `import/project.test.properties`
+To change default IP address, change `cassandra.ip` in both files `import/project.properties` and `import/project.test.properties`. 
+
+If more than one node is involved, the IP address could be from any one of the nodes.
 
 Run command `gradlew import:all`.
 
+This command performs `import:createKeyspace`, `import:dropTable`, `import:importSchema` and `import:importData` sequentially. 
+
+If the size of data file is big (more than 100MB), it is suggested that you follow intructions displayed and import the data manually.
+
+
 ### Run Client
 
-Open Java IDE installed and import the project as `Gradle Project`. Make sure `Auto Import` is enabled.
+Run command `gradlew client:run -q` at project root.
+
+Alternatively, open Java IDE installed and import the project as `Gradle Project`. Make sure `Auto Import` is enabled.
 
 `Build Project` and make sure there are no missing dependencies. 
 
