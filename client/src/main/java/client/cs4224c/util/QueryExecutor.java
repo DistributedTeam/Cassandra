@@ -1,15 +1,14 @@
 package client.cs4224c.util;
 
+import client.cs4224c.policy.ExperimentLoadBalancePolicy;
 import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.RoundRobinPolicy;
-import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class QueryExecutor {
 
@@ -35,10 +34,16 @@ public class QueryExecutor {
     }
 
     public void reload() {
-        cluster = Cluster.builder()
+        Cluster.Builder builder = Cluster.builder()
                 .addContactPoint(ProjectConfig.getInstance().getCassandraIp())
-                .withLoadBalancingPolicy(new RoundRobinPolicy())
-                .build();
+                .withCompression(ProtocolOptions.Compression.LZ4)
+                .withSocketOptions(
+                    new SocketOptions()
+                        .setReadTimeoutMillis(ProjectConfig.getInstance().getCassandraClientReadTimeout()));
+        if (StringUtils.isNotEmpty(System.getProperty(Constant.PROPERTY_EXPERIMENT_HOST))) {
+            builder.withLoadBalancingPolicy(new ExperimentLoadBalancePolicy());
+        }
+        cluster = builder.build();
         session = cluster.connect(ProjectConfig.getInstance().getCassandraKeyspace());
         initialize();
     }
@@ -46,7 +51,8 @@ public class QueryExecutor {
     private void initialize() {
         logger.info("Send all prepared statements to server now.");
         for (PStatement statement : PStatement.values()) {
-            statementMap.put(statement, session.prepare(statement.getCql()));
+            statementMap.put(statement,
+                    session.prepare(statement.getCql()).setConsistencyLevel(ConsistencyLevel.QUORUM));
         }
     }
 
@@ -65,34 +71,6 @@ public class QueryExecutor {
         ResultSet resultSet = this.execute(statement, args);
         return resultSet.one();
     }
-
-    public Row getAndUpdateWithRetry(PStatement getStatement, List<Object> getArgs, PStatement updateStatement, List<Object> updateArgs, Function<Row, List<Object>> updateFunc, Function<Row, Object> ifPositionFunc) {
-        Row result = null;
-        int count = 1;
-        while (true) {
-            result = executeAndGetOneRow(getStatement, getArgs);
-            if (result == null) {
-                throw new IllegalArgumentException(String.format("%s with args %s returns empty row.", getStatement, getArgs));
-            }
-            List<Object> newUpdateArgs = Lists.newArrayList();
-            newUpdateArgs.addAll(updateFunc.apply(result));
-            newUpdateArgs.addAll(updateArgs);
-            newUpdateArgs.add(ifPositionFunc.apply(result)); // if statement params
-            ResultSet resultSet = execute(updateStatement, newUpdateArgs);
-            if (resultSet.wasApplied()) {
-                break;
-            }
-            if (count >= ProjectConfig.getInstance().getMaxIfUpdateTry()) {
-                logger.error("Executing getAndUpdateWithRetry with getStatement {} ({}) updateStatement {}({}) fails. Exceed maximum retry: {}",
-                        getStatement, getArgs, updateStatement, updateArgs, count);
-                throw new RuntimeException();
-            }
-            count++;
-        }
-        return result;
-    }
-
-    // USED IN TEST ENV
 
     public ResultSet execute(String query) {
         return session.execute(query);

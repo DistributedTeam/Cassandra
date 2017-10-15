@@ -18,7 +18,7 @@ public class DeliveryTransactionTest extends BaseTransactionTest{
 
     @Test
     public void test1() throws Exception {
-        this.executeFlowWithData("deliveryTransactionCase1.txt");
+        this.executeFlowWithData("case1.txt");
 
         // validate updatedMinOrderIdWithNullCarrierId
         ResultSet updatedMinOrderIdWithNullCarrierIdRow1 = QueryExecutor.getInstance().execute("SELECT dt_min_ud_o_id FROM delivery_transaction WHERE dt_w_id = 7 AND dt_d_id = 2");
@@ -29,6 +29,10 @@ public class DeliveryTransactionTest extends BaseTransactionTest{
 
         ResultSet updatedMinOrderIdWithNullCarrierIdRow3 = QueryExecutor.getInstance().execute("SELECT dt_min_ud_o_id FROM delivery_transaction WHERE dt_w_id = 7 AND dt_d_id = 9");
         Assert.assertEquals("Row[2442]", updatedMinOrderIdWithNullCarrierIdRow3.one().toString());
+
+        // non-undelivered order district will not be accidentally updated
+        ResultSet updatedMinOrderIdWithNullCarrierIdRow4 = QueryExecutor.getInstance().execute("SELECT dt_min_ud_o_id FROM delivery_transaction WHERE dt_w_id = 7 AND dt_d_id = 1");
+        Assert.assertNull(updatedMinOrderIdWithNullCarrierIdRow4.one());
 
         // validate order carrier_id
         ResultSet orderRow1 = QueryExecutor.getInstance().execute("SELECT o_carrier_id FROM order_by_o_id WHERE o_w_id = 7 AND o_d_id = 2 AND o_id = 2594");
@@ -57,13 +61,19 @@ public class DeliveryTransactionTest extends BaseTransactionTest{
         }
 
         // validate customer
-        ResultSet customerRow1 = QueryExecutor.getInstance().execute("SELECT c_balance, c_delivery_cnt FROM customer WHERE c_w_id = 7 AND c_d_id = 2 AND c_id = 2816");
-        Assert.assertEquals("Row[1011.35, 1]", customerRow1.one().toString());
+        ResultSet customerRow1 = QueryExecutor.getInstance().execute("SELECT c_balance, c_delivery_cnt FROM customer_stats WHERE c_w_id = 7 AND c_d_id = 2 AND c_id = 2816");
+        Assert.assertEquals("Row[101135, 1]", customerRow1.one().toString());
+        ResultSet customerPartialRow1 = QueryExecutor.getInstance().execute("SELECT c_balance FROM customer_partial WHERE c_w_id = 7 AND c_d_id = 2 AND c_id = 2816");
+        Assert.assertEquals("Row[1011.35]", customerPartialRow1.one().toString());
 
-        ResultSet customerRow2 = QueryExecutor.getInstance().execute("SELECT c_balance, c_delivery_cnt FROM customer WHERE c_w_id = 7 AND c_d_id = 7 AND c_id = 2410");
-        Assert.assertEquals("Row[5409.29, 1]", customerRow2.one().toString());
+        ResultSet customerRow2 = QueryExecutor.getInstance().execute("SELECT c_balance, c_delivery_cnt FROM customer_stats WHERE c_w_id = 7 AND c_d_id = 7 AND c_id = 2410");
+        Assert.assertEquals("Row[540929, 1]", customerRow2.one().toString());
+        ResultSet customerPartialRow2 = QueryExecutor.getInstance().execute("SELECT c_balance FROM customer_partial WHERE c_w_id = 7 AND c_d_id = 7 AND c_id = 2410");
+        Assert.assertEquals("Row[5409.29]", customerPartialRow2.one().toString());
 
-        ResultSet customerRow3 = QueryExecutor.getInstance().execute("SELECT c_balance, c_delivery_cnt FROM customer WHERE c_w_id = 7 AND c_d_id = 9 AND c_id = 2043");
-        Assert.assertEquals("Row[1230.71, 1]", customerRow3.one().toString());
+        ResultSet customerRow3 = QueryExecutor.getInstance().execute("SELECT c_balance, c_delivery_cnt FROM customer_stats WHERE c_w_id = 7 AND c_d_id = 9 AND c_id = 2043");
+        Assert.assertEquals("Row[123071, 1]", customerRow3.one().toString());
+        ResultSet customerPartialRow3 = QueryExecutor.getInstance().execute("SELECT c_balance FROM customer_partial WHERE c_w_id = 7 AND c_d_id = 9 AND c_id = 2043");
+        Assert.assertEquals("Row[1230.71]", customerPartialRow3.one().toString());
     }
 }

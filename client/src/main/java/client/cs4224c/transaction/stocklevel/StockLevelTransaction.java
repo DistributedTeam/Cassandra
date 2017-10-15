@@ -24,11 +24,6 @@ public class StockLevelTransaction extends AbstractTransaction {
         this.data = data;
     }
 
-    private static int INDEX_W_ID = 0;
-    private static int INDEX_D_ID = 1;
-    private static int INDEX_T = 2;
-    private static int INDEX_L = 3;
-
     private static int INDEX_NEXT_O_ID = 0;
 
     private static int INDEX_I_ID = 0;
@@ -42,7 +37,7 @@ public class StockLevelTransaction extends AbstractTransaction {
         if (warehouseDistrictRow == null) {
             throw new RuntimeException("Empty district in database.");
         }
-        int next_o_id = warehouseDistrictRow.getInt(INDEX_NEXT_O_ID);
+        int next_o_id = (int)warehouseDistrictRow.getLong(INDEX_NEXT_O_ID);
 
         for (int i = next_o_id - data.getL(); i < next_o_id; i++) {
 
@@ -54,15 +49,23 @@ public class StockLevelTransaction extends AbstractTransaction {
 
             ResultSet orderLineItems = QueryExecutor.getInstance().execute(PStatement.GET_LAST_L_ORDER_ITEMS, Lists.newArrayList(data.getW_ID(), data.getD_ID(), i));
             if (!orderLineItems.iterator().hasNext()) {
-                logger.warn("NEXT_O_ID is not consecutive as orderLine cannot be find in database [{}, {}, {}].", data.getW_ID(), data.getD_ID(), i);
+                logger.warn("OrderLine cannot be find in database [{}, {}, {}]. This might due to interleave execution.", data.getW_ID(), data.getD_ID(), i);
                 continue;
             }
             for (Row orderLineItem : orderLineItems) {
                 int i_id = orderLineItem.getInt(INDEX_I_ID);
-                Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
-                int quantity = stockItemRow.getInt(INDEX_QUANTITY);
-                if (quantity < data.getT() && !data.getLowStockItems().contains(i_id)) {
+
+                if (data.getOrderlineItems().contains(i_id)) {
                     // without duplicates
+                    // no need to query as it is already there.
+                    // in case that someone minus stock in between this, we cannot do anything about it.
+                    continue;
+                }
+                data.getOrderlineItems().add(i_id);
+
+                Row stockItemRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_STOCK_QUANTITY, Lists.newArrayList(data.getW_ID(), i_id));
+                int quantity = (int)stockItemRow.getLong(INDEX_QUANTITY);
+                if (quantity < data.getT()) {
                     data.getLowStockItems().add(i_id);
                 }
             }

@@ -36,16 +36,39 @@ public class ImportDataTask implements Runnable {
         logger.info("importData template {}", importDataCqlTemplate);
 
         String importDataCql = importDataCqlTemplate.replace("_DATA_CSV_FOLDER_",
-                Paths.get(config.getProjectRoot(), config.getDataCsvFolder()).toString() + File.separator)
-                .replace("\n", ""); // delete all line-breaker
-        logger.info("importData cql {}", importDataCql);
+                Paths.get(config.getProjectRoot(), config.getDataCsvFolder()).toString() + File.separator);
+
+        System.out.println("#######################################################");
+        System.out.println("# IMPORTANT NOTES                                     #");
+        System.out.println("# If your data set is very big, Cassandra might spend #");
+        System.out.println("# a lot of time on GC process, and thus the importing #");
+        System.out.println("# task will hang or even stop!!!                      #");
+        System.out.println("#                                                     #");
+        System.out.println("# We recommend you to run the following command       #");
+        System.out.println("# directly on cqlsh.                                  #");
+        System.out.println("#######################################################");
+
+        System.out.println("Please run the following command use cqlsh.");
+        System.out.println(String.format("USE %s;", ProjectConfig.getInstance().getCassandraKeyspace()));
+        System.out.println(importDataCql);
+
+        System.out.println("\nImporting will begin in 10 seconds, you can exist with Ctrl+C if you decide to import it manually.");
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            System.out.println("Please import the data manually.");
+        }
+
+        //logger.info("importData cql {}", importDataCql);
 
         String[] cmd = new String[] {
                 getCqlShCmd(),
+                "--request-timeout=60",
                 "-k",
                 config.getCassandraKeyspace(),
                 "-e",
-                importDataCql,
+                importDataCql.replace("\n", ""), // delete all line-breaker
                 config.getCassandraIp()
         };
         logger.info("Command will be executed {}", Lists.newArrayList(cmd));

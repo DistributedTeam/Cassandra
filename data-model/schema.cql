@@ -11,11 +11,18 @@ CREATE TABLE warehouse_district (
     d_id smallint,
     d_address address,
     d_name text,
-    d_next_o_id int,
     d_tax double,
     w_address address,
     w_name text,
     w_tax double,
+    PRIMARY KEY ((d_w_id, d_id))
+);
+
+CREATE TABLE warehouse_district_stats (
+    d_w_id smallint,
+    d_id smallint,
+    d_next_o_id counter,
+    d_ytd counter,
     PRIMARY KEY ((d_w_id, d_id))
 );
 
@@ -34,7 +41,7 @@ CREATE TABLE order_by_o_id (
 CREATE TABLE delivery_transaction (
     dt_w_id smallint,
     dt_d_id smallint,
-    dt_min_ud_o_id int,
+    dt_min_ud_o_id counter,
     PRIMARY KEY ((dt_w_id, dt_d_id))
 );
 
@@ -72,11 +79,29 @@ CREATE TABLE stock_item (
     s_dist_08 text,
     s_dist_09 text,
     s_dist_10 text,
-    s_order_cnt int,
-    s_quantity int,
-    s_remote_cnt int,
-    s_ytd double,
     PRIMARY KEY ((s_w_id, s_i_id))
+);
+
+CREATE TABLE stock_item_stats (
+    s_w_id smallint,
+    s_i_id int,
+    s_order_cnt counter,
+    s_quantity counter,
+    s_remote_cnt counter,
+    s_ytd counter,
+    PRIMARY KEY ((s_w_id, s_i_id))
+);
+
+CREATE TABLE customer_partial (
+    c_w_id smallint,
+    c_d_id smallint,
+    c_id int,
+    c_first text,
+    c_middle text,
+    c_last text,
+    c_balance double,
+    c_last_order int,
+    PRIMARY KEY ((c_w_id, c_d_id), c_id)
 );
 
 CREATE TABLE customer (
@@ -84,27 +109,43 @@ CREATE TABLE customer (
     c_d_id smallint,
     c_id int,
     c_address address,
-    c_balance double,
     c_credit text,
     c_credit_lim double,
     c_data text,
-    c_delivery_cnt int,
     c_discount double,
     c_first text,
     c_middle text,
     c_last text,
-    c_last_order int,
-    c_payment_cnt int,
     c_phone text,
     c_since timestamp,
-    c_ytd_payment double,
     PRIMARY KEY ((c_w_id, c_d_id), c_id)
 );
 
+CREATE TABLE customer_stats (
+    c_w_id smallint,
+    c_d_id smallint,
+    c_id int,
+    c_balance counter,
+    c_delivery_cnt counter,
+    c_payment_cnt counter,
+    c_ytd_payment counter,
+    PRIMARY KEY ((c_w_id, c_d_id), c_id)
+);
+
+
 CREATE MATERIALIZED VIEW customer_balance
-  AS SELECT * FROM customer
+  AS SELECT * FROM customer_partial
   WHERE c_w_id IS NOT NULL and c_d_id IS NOT NULL and
     c_balance IS NOT NULL and c_id IS NOT NULL and
     c_first IS NOT NULL and c_middle IS NOT NULL and
     c_last IS NOT NULL
-  PRIMARY KEY ((c_w_id, c_d_id), c_balance, c_id)
+  PRIMARY KEY ((c_w_id, c_d_id), c_balance, c_id);
+
+ALTER TABLE warehouse_district WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  };
+
+ALTER TABLE stock_item WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  };
+
+ALTER TABLE customer WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  }

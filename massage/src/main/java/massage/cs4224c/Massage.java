@@ -20,7 +20,18 @@ public class Massage {
     public static void main(String[] args) {
         logger.info("Massage task begins.");
 
-        ArrayList<AbstractConverter> abstractConverterArrayList = Lists.newArrayList(new CustomerTable(), new OrderTable(), new OrderLineItemTable(), new StockItemTable(), new WarehouseDistrictTable());
+        ArrayList<AbstractConverter> abstractConverterArrayList = Lists.newArrayList(
+                new CustomerPartialTable(),
+                new CustomerStatsTable(),
+                new CustomerTable(),
+                new DeliveryTransactionTable(),
+                new OrderLineItemTable(),
+                new OrderTable(),
+                new StockItemStatsTable(),
+                new StockItemTable(),
+                new WarehouseDistrictStatsTable(),
+                new WarehouseDistrictTable()
+        );
 
         ExecutorService executorService = Executors.newFixedThreadPool(6);
 

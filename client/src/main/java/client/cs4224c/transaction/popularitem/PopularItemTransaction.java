@@ -53,7 +53,7 @@ public class PopularItemTransaction extends AbstractTransaction {
         if (warehouseDistrictRow == null) {
             throw new RuntimeException("Empty district in database.");
         }
-        int next_o_id = warehouseDistrictRow.getInt(INDEX_NEXT_O_ID);
+        int next_o_id = (int)warehouseDistrictRow.getLong(INDEX_NEXT_O_ID);
 
         for (int i = next_o_id - data.getL(); i < next_o_id; i++) {
 

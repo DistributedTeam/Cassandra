@@ -24,8 +24,14 @@ public class PaymentTransactionTest extends BaseTransactionTest {
 
         logger.info("Begin to validate database for PaymentTransaction");
 
-        ResultSet customer = QueryExecutor.getInstance().execute("SELECT c_balance, c_ytd_payment, c_payment_cnt FROM customer WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 105");
-        Assert.assertEquals("Row[-1944.29, 1944.29, 2]", customer.one().toString());
+        ResultSet customer = QueryExecutor.getInstance().execute("SELECT c_balance, c_ytd_payment, c_payment_cnt FROM customer_stats WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 105");
+        Assert.assertEquals("Row[-194429, 19442900, 2]", customer.one().toString());
+
+        ResultSet customerPartial = QueryExecutor.getInstance().execute("SELECT c_balance FROM customer_partial WHERE c_w_id = 1 AND c_d_id = 1 AND c_id = 105");
+        Assert.assertEquals("Row[-1944.29]", customerPartial.one().toString());
+
+        ResultSet warehouseDistrict = QueryExecutor.getInstance().execute("SELECT d_ytd FROM warehouse_district_stats WHERE d_w_id = 1 AND d_id = 1");
+        Assert.assertEquals("Row[3193429]", warehouseDistrict.one().toString());
 
         logger.info("End: Validate database for PaymentTransaction");
 

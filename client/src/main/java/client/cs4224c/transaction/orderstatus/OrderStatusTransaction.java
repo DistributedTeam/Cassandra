@@ -38,28 +38,26 @@ public class OrderStatusTransaction extends AbstractTransaction {
     private static int INDEX_CUSTOMER_FIRSR_NAME = 0;
     private static int INDEX_CUSTOMER_MIDDLE_NAME = 1;
     private static int INDEX_CUSTOMER_LAST_NAME = 2;
-    private static int INDEX_CUSTOMER_BALANCE = 3;
-    private static int INDEX_CUSTOMER_LAST_ORDER_ID = 4;
+    private static int INDEX_CUSTOMER_LAST_ORDER_ID = 3;
+    private static int INDEX_CUSTOMER_BALANCE = 4;
 
     @Override
     public void executeFlow() {
-        Row customerRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_NAME_AND_BALANCE, Lists.newArrayList(data.getC_W_ID(), data.getC_D_ID(), data.getC_ID()));
-        if (customerRow == null) {
-            throw new RuntimeException(String.format("Customer C_W_ID = %d, C_D_ID = %d, C_ID = %s doesn't exist!", data.getC_W_ID(), data.getC_D_ID(), data.getC_ID()));
+        Row customerRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_NAME_AND_LAST_ORDER, Lists.newArrayList(data.getC_W_ID(), data.getC_D_ID(), data.getC_ID()));
+
+        if (customerRow.isNull(INDEX_CUSTOMER_LAST_ORDER_ID)) {
+            logger.warn(String.format("The customer [%d, %d, %d] doesn't have any order.", data.getC_W_ID(), data.getC_D_ID(), data.getC_ID()));
+            return;
         }
 
-        System.out.println(String.format("1. Customer's name (C_FIRST: %s, C_MIDDLE: %s, C_LAST: %s), balance C_BALANCE: %.4f",
+        System.out.println(String.format("1. Customer(C_FIRST: %s, C_MIDDLE: %s, C_LAST: %s), C_BALANCE: %.2f",
                 customerRow.getString(INDEX_CUSTOMER_FIRSR_NAME),
                 customerRow.getString(INDEX_CUSTOMER_MIDDLE_NAME),
                 customerRow.getString(INDEX_CUSTOMER_LAST_NAME),
-                customerRow.getDouble(INDEX_CUSTOMER_BALANCE)));
+                customerRow.getDouble(INDEX_CUSTOMER_BALANCE))); // DECIMAL(12,2)
 
         Row lastOrderRow = QueryExecutor.getInstance().executeAndGetOneRow(PStatement.GET_CUSTOMER_LAST_ORDER, Lists.newArrayList(data.getC_W_ID(), data.getC_D_ID(), customerRow.getInt(INDEX_CUSTOMER_LAST_ORDER_ID)));
-        if (lastOrderRow == null) {
-            throw new RuntimeException(String.format("Order O_W_ID = %d, O_D_ID = %d, C_ID = %s doesn't exist!", data.getC_W_ID(), data.getC_D_ID(), customerRow.getInt(INDEX_CUSTOMER_LAST_ORDER_ID)));
-        }
-
-        System.out.println(String.format("2. Last order : order number O_ID: %s, entry date and time O_ENTRY_D: %s, carrier identifier O_CARRIER_ID: %s",
+        System.out.println(String.format("2. Last order : O_ID: %s, O_ENTRY_D: %s, O_CARRIER_ID: %s",
                 customerRow.getInt(INDEX_CUSTOMER_LAST_ORDER_ID),
                 TimeUtility.format(lastOrderRow.getTimestamp(INDEX_ORDER_ENTRY_DATE)),
                 lastOrderRow.isNull(INDEX_ORDER_CARRIER_ID) ? "NO_CARRIER" : lastOrderRow.getInt(INDEX_ORDER_CARRIER_ID)));
@@ -70,7 +68,7 @@ public class OrderStatusTransaction extends AbstractTransaction {
         for (Row orderLine : orderLineRows) {
             Date OL_DELIVERY_D = orderLine.getTimestamp(INDEX_ORDER_LINE_DELIVERY_DATE);
 
-            System.out.println(String.format("\tItem number OL_I_ID: %s, Supplying warehouse number OL_SUPPLY_W_ID: %d, Quantity ordered OL_QUANTITY: %d, Total price for ordered item OL_AMOUNT: %s, Data and time of delivery OL_DELIVERY_D: %s",
+            System.out.println(String.format("\tOL_I_ID: %s, OL_SUPPLY_W_ID: %d, OL_QUANTITY: %d, OL_AMOUNT: %s, OL_DELIVERY_D: %s",
                     orderLine.getInt(INDEX_ORDER_LINE_ID),
                     orderLine.getShort(INDEX_ORDER_LINE_SUPPLY_WAREHOUSE_ID),
                     orderLine.getInt(INDEX_ORDER_LINE_QUANTITY),

@@ -1,5 +1,5 @@
-1. Customer's name (C_FIRST: stchgngvjbmeki, C_MIDDLE: OE, C_LAST: PRIEINGPRES), balance C_BALANCE: -10.0000
-2. Last order : order number O_ID: 2543, entry date and time O_ENTRY_D: 2017-08-26 21:54:44.835 UTC, carrier identifier O_CARRIER_ID: NO_CARRIER
+1. Customer(C_FIRST: stchgngvjbmeki, C_MIDDLE: OE, C_LAST: PRIEINGPRES), C_BALANCE: -10.00
+2. Last order : O_ID: 2543, O_ENTRY_D: 2017-08-26 21:54:44.835 UTC, O_CARRIER_ID: NO_CARRIER
 3. Item in last order:
-	Item number OL_I_ID: 65531, Supplying warehouse number OL_SUPPLY_W_ID: 7, Quantity ordered OL_QUANTITY: 5, Total price for ordered item OL_AMOUNT: 2664.71, Data and time of delivery OL_DELIVERY_D: NOT_DELIVERED
-	Item number OL_I_ID: 92201, Supplying warehouse number OL_SUPPLY_W_ID: 7, Quantity ordered OL_QUANTITY: 5, Total price for ordered item OL_AMOUNT: 2754.58, Data and time of delivery OL_DELIVERY_D: NOT_DELIVERED
+	OL_I_ID: 65531, OL_SUPPLY_W_ID: 7, OL_QUANTITY: 5, OL_AMOUNT: 2664.71, OL_DELIVERY_D: NOT_DELIVERED
+	OL_I_ID: 92201, OL_SUPPLY_W_ID: 7, OL_QUANTITY: 5, OL_AMOUNT: 2754.58, OL_DELIVERY_D: NOT_DELIVERED

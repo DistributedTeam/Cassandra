@@ -6,8 +6,6 @@ import client.cs4224c.transaction.BaseTransactionTest;
 import client.cs4224c.util.QueryExecutor;
 import org.junit.Test;
 
-import java.util.regex.Pattern;
-
 public class ExperimentClientTest extends BaseTransactionTest {
 
     public ExperimentClientTest() {
@@ -21,7 +19,7 @@ public class ExperimentClientTest extends BaseTransactionTest {
 
     @Test
     public void testMain_typicalCase() throws Exception {
-        ExperimentClient.main(new String[] {"1.txt"});
+        ExperimentClient.main(new String[] {"1.txt", "127.0.0.1"});
 
         // reload connection as the experiment client closes the connection
         QueryExecutor.getInstance().reload();
