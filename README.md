@@ -128,4 +128,4 @@ Format
 
 ### Verification
 
-To verify that the project is correctly set up, refer to `test.md` at project rot for more details.
+To verify that the project is correctly set up, refer to `test.md` at project root for more details.
