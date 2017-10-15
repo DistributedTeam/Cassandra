@@ -39,7 +39,7 @@ Make sure `gradlew massage:run` command is executed successfully before this ste
 Run Cassandra on chosen IP address. Refer to [Apache Cassandra Documentation v4.0](http://cassandra.apache.org/doc/latest/) for more details.
 The `gradlew` script assumes by default that Cassandra runs on IP address `127.0.0.1`. 
 
-To change default IP address, change `cassandra.ip` in file `import/project.properties. 
+To change default IP address, change `cassandra.ip` in file `import/project.properties`. 
 
 If more than one node is involved, the IP address could be from any one of the nodes.
 
