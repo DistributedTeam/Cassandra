@@ -31,7 +31,7 @@ public enum PStatement {
     GET_CUSTOMER_FULL("SELECT c_first, c_middle, c_last, c_address, c_phone, c_since, c_credit, c_credit_lim, c_discount FROM customer WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     GET_WD_ADDRESS("SELECT w_address, d_address FROM warehouse_district WHERE d_w_id = ? AND d_id = ?"),
 
-    //Delivery Transaction
+    // Delivery Transaction
     GET_MIN_ORDER_ID_WITH_NULL_CARRIER_ID("SELECT dt_min_ud_o_id FROM delivery_transaction WHERE dt_w_id = ? AND dt_d_id = ?"),
     UPDATE_MIN_ORDER_ID_WITH_NULL_CARRIER_ID("UPDATE delivery_transaction SET dt_min_ud_o_id = dt_min_ud_o_id + ? WHERE dt_w_id = ? AND dt_d_id = ?"),
     GET_CUSTOMER_ID_FROM_ORDER("SELECT o_c_id FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? and o_id = ?"),
@@ -42,7 +42,7 @@ public enum PStatement {
     UPDATE_CUSTOMER_BALANCE_AND_DELIVERY_COUNT("UPDATE customer_stats SET c_balance = c_balance + ?, c_delivery_cnt = c_delivery_cnt + ? WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
 
     // OrderStatus Transaction
-    GET_CUSTOMER_NAME_AND_LAST_ORDER("SELECT c_first, c_middle, c_last, c_last_order from customer_partial WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
+    GET_CUSTOMER_NAME_AND_LAST_ORDER("SELECT c_first, c_middle, c_last, c_last_order, c_balance from customer_partial WHERE c_w_id = ? AND c_d_id = ? AND c_id = ?"),
     GET_CUSTOMER_LAST_ORDER("SELECT o_entry_d, o_carrier_id FROM order_by_o_id WHERE o_w_id = ? AND o_d_id = ? AND o_id = ?"),
     GET_ORDER_LINES_FOR_LAST_ORDER("SELECT ol_i_id, ol_supply_w_id, ol_quantity, ol_amount, ol_delivery_d FROM order_line_item WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id = ?"),
 
