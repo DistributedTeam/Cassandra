@@ -58,7 +58,7 @@ To change default IP address, change `cassandra.ip` in file `client/project.prop
 
 If more than one node is involved, the IP address could be from any one of the nodes.
 
-To change consistency level of Cassandra, change `query.consistency.level` in file `client/project.properties` to `ONE`, `QUORUM` and `ALL`. This change applies to all queries.
+To change consistency level of Cassandra, change `query.consistency.level` in file `client/project.properties` to your required Cassandra consistency level. This change applies to all queries.
 
 Run command `gradlew client:run -q` at project root.
 
@@ -137,4 +137,4 @@ Format
 
 ### Verification
 
-To verify that the project is correctly set up, refer to `test.md` at project root for more details.
+To verify that the project is correctly set up, refer to [`test.md`](test.md) at project root for more details.
