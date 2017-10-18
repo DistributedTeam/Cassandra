@@ -57,10 +57,10 @@ public class ExperimentClient {
 
         double executionTimeInSecond = (endTime - beginTime) / 1000.0;
 
-        System.out.println("\n[SUMMARY]");
-        System.out.println("Number of executed transactions: " + numOfTransaction);
-        System.out.println("Total transaction execution time (seconds): " + executionTimeInSecond);
-        System.out.println("Transaction throughput: " + executionTimeInSecond / numOfTransaction);
+        System.err.println("\n[SUMMARY]");
+        System.err.println("Number of executed transactions: " + numOfTransaction);
+        System.err.println("Total transaction execution time (seconds): " + executionTimeInSecond);
+        System.err.println("Transaction throughput: " + executionTimeInSecond / numOfTransaction);
 
         QueryExecutor.getInstance().closeConnection();
     }
