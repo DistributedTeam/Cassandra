@@ -6,8 +6,3 @@
 	 ITEM_NUMBER: 14, I_NAME: zgtysykztihnn, SUPPLIER_WAREHOUSE: 10, QUANTITY: 68, OL_AMOUNT: 3567.28, S_QUANTITY: 10
 	 ITEM_NUMBER: 283, I_NAME: hqckzdrkmlwdiwc, SUPPLIER_WAREHOUSE: 7, QUANTITY: 40, OL_AMOUNT: 3896.00, S_QUANTITY: 107
 	 ITEM_NUMBER: 312, I_NAME: ujljrftzxaqwgxvq, SUPPLIER_WAREHOUSE: 12, QUANTITY: 10, OL_AMOUNT: 862.50, S_QUANTITY: 69
-
-[SUMMARY]
-Number of executed transactions: 1
-Total transaction execution time (seconds): 1.727
-Transaction throughput: 1.727

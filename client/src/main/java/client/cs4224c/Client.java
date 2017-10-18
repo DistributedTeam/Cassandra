@@ -4,6 +4,7 @@ import client.cs4224c.parser.AbstractParser;
 import client.cs4224c.parser.ParserMap;
 import client.cs4224c.transaction.AbstractTransaction;
 import client.cs4224c.util.Constant;
+import client.cs4224c.util.QueryExecutor;
 
 import java.util.Scanner;
 
@@ -31,6 +32,6 @@ public class Client {
             transaction.execute();
         }
 
-
+        QueryExecutor.getInstance().closeConnection();
     }
 }
